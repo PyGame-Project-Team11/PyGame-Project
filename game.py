@@ -25,11 +25,21 @@ walk_right = [
     pygame.image.load('images/player_right/player_right3.png')
 ]
 player_anim_count = 0
+player_x = 300
+player_y = 420
+player_speed = 10
 
 running = True
 while running:
     screen.blit(background, (0, 0))
-    screen.blit(walk_right[player_anim_count], (300, 420))
+    screen.blit(walk_right[player_anim_count], (player_x, player_y))
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT] and player_x > 0:
+        player_x -= player_speed
+        is_moving = True
+    elif keys[pygame.K_RIGHT] and player_x < 760:
+        player_x += player_speed
 
     if player_anim_count == 2:
         player_anim_count = 0
