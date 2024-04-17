@@ -2,22 +2,35 @@ import pygame
 
 clock = pygame.time.Clock()
 pygame.init()
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 1000, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("proj n11")
-
-transparent_surface = pygame.Surface((WIDTH*0.8, HEIGHT*0.8), pygame.SRCALPHA)
-transparent_surface.fill((200, 200, 200, 200))
-greeting = True
 
 # icon = pygame.image.load('images/icon.png')
 # pygame.display.set_icon(icon)
 
-myfont = pygame.font.SysFont('comicsansms', 20)
+myfont = pygame.font.SysFont('Arial', 20)
 
-button_surf = myfont.render('Start', True, 'white')
-button = pygame.Rect(200, 200, 110, 60)
-button.center = (WIDTH//2, HEIGHT//2 + 100)
+start_button_surf = myfont.render('Start', True, 'white')
+start_button = pygame.Rect(200, 200, 120, 60)
+start_button.center = (WIDTH//2, HEIGHT//2 + 160)
+
+start_transparent_surface = pygame.Surface((WIDTH*0.8, HEIGHT*0.8), pygame.SRCALPHA)
+start_transparent_surface.fill((200, 200, 200, 200))
+greeting = 1 #True
+
+rules_button_surf = myfont.render('Rules', True, 'white')
+rules_button = pygame.Rect(200, 200, 100, 60)
+rules_button.center = (WIDTH - 100, 50)
+
+rules_transparent_surface = pygame.Surface((620, 220), pygame.SRCALPHA)
+rules_transparent_surface.fill((200, 200, 200, 200))
+rules_show = 0 #False
+
+ok_button_surf = myfont.render('OK', True, 'white')
+ok_button = pygame.Rect(200, 200, 80, 40)
+ok_button.center = (840, 280)
+
 
 background = pygame.image.load('images/background.png')
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
@@ -38,29 +51,26 @@ is_moving_right = False
 last_movement = True
 
 class Player:
-
     def __init__(self):
         self.health = 70
-        self.grades = 100
+        self.grades = 0
         self.happiness = 80
-        self.finances = 100000
+        self.finances = 100.000
         self.sleepiness = 10
         self.stress = 10
         self.friends = 0
-        self.pos_x = 300
+        self.pos_x = 400
         self.pos_y = 420
         self.speed = 10
-
     def draw_stats(self, screen):
         stats = [
             f"Health: {self.health}", f"Grades: {self.grades}",
             f"Happiness: {self.happiness}", f"Finances:{self.finances} ₸",
-            f"Sleepiness: {self.sleepiness}", f"Stress: {self.stress}",
             f"Friends: {self.friends}"
         ]
         for i, stat in enumerate(stats):
             text_surface = myfont.render(stat, True, (255, 255, 255))
-            screen.blit(text_surface, (10, i * 20))
+            screen.blit(text_surface, (20, i * 25 + 10))
 
 player = Player()
 
@@ -70,16 +80,40 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if button.collidepoint(event.pos):
-                t = False
+            if start_button.collidepoint(event.pos):
+                greeting = False
+            if rules_button.collidepoint(event.pos):
+                rules_show = True
+            if ok_button.collidepoint(event.pos):
+                rules_show = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                t = False
+                greeting = False
 
     screen.blit(background, (0, 0))
 
     if not greeting:
         player.draw_stats(screen)
+
+        pygame.draw.rect(screen, (100, 100, 100), rules_button)
+        screen.blit(rules_button_surf, (rules_button.x + 25, rules_button.y + 17))
+
+        if rules_show:
+            screen.blit(rules_transparent_surface, (WIDTH*0.3, 100))
+            rules_text = [
+                "1. You must survive until 25 December 2023 ",
+                "2. Your health status must not go below 30",
+                "3. Your grades must not go below 30",
+                "4. Every 4 weeks you will automatically get additional finances",
+                "5. Live your best student life!"
+            ]
+            for i, text in enumerate(rules_text):
+                text_surface = myfont.render(text, True, (0, 0, 0))
+                screen.blit(text_surface, (330, i * 30 + 120))
+
+            pygame.draw.rect(screen, (100, 100, 100), ok_button)
+            screen.blit(ok_button_surf, (ok_button.x + 24, ok_button.y + 8))
+
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and player.pos_x > 0:
@@ -106,7 +140,7 @@ while running:
             screen.blit(walk_right[0], (player.pos_x, player.pos_y))
 
     else:
-        screen.blit(transparent_surface, (WIDTH*0.1, HEIGHT*0.1))
+        screen.blit(start_transparent_surface, (WIDTH*0.1, HEIGHT*0.1))
         greeting_text = [
             "Hi!",
             "To play this game imagine that you are a student",
@@ -117,14 +151,10 @@ while running:
         ]
         for i, text in enumerate(greeting_text):
             text_surface = myfont.render(text, True, (0, 0, 0))
-            screen.blit(text_surface, (100, i * 30 + 100))
+            screen.blit(text_surface, (WIDTH*0.15, i * 30 + 100))
 
-        a, b = pygame.mouse.get_pos()
-        if button.x <= a <= button.x + 110 and button.y <= b <= button.y + 60:
-            pygame.draw.rect(screen, (180, 180, 180), button)
-        else:
-            pygame.draw.rect(screen, (110, 110, 110), button)
-        screen.blit(button_surf, (button.x + 26, button.y + 14))
+        pygame.draw.rect(screen, (100, 100, 100), start_button)
+        screen.blit(start_button_surf, (start_button.x + 33, start_button.y + 14))
 
     pygame.display.update()
     clock.tick(15)
