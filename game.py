@@ -72,9 +72,9 @@ start_text3 = start_font2.render('Remember, every action has its own consequence
 
 start_text1_rect = start_text1.get_rect()
 start_text1_rect.center = (WIDTH//2, HEIGHT//2-20)
-start_text2_rect = start_text1.get_rect()
+start_text2_rect = start_text2.get_rect()
 start_text2_rect.center = (WIDTH//2, HEIGHT//2)
-start_text3_rect = start_text1.get_rect()
+start_text3_rect = start_text3.get_rect()
 start_text3_rect.center = (WIDTH//2, HEIGHT//2+20)
 
 while running:
