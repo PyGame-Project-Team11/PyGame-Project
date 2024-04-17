@@ -28,11 +28,11 @@ player_anim_count = 0
 player_x = 300
 player_y = 420
 player_speed = 10
+is_moving = False
 
 running = True
 while running:
     screen.blit(background, (0, 0))
-    screen.blit(walk_right[player_anim_count], (player_x, player_y))
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT] and player_x > 0:
@@ -40,6 +40,15 @@ while running:
         is_moving = True
     elif keys[pygame.K_RIGHT] and player_x < 760:
         player_x += player_speed
+        is_moving = True
+    else:
+        is_moving = False
+
+    if is_moving:
+        screen.blit(walk_right[player_anim_count], (player_x, player_y))
+        player_anim_count = (player_anim_count + 1) % len(walk_right)
+    else:
+        screen.blit(walk_right[0], (player_x, player_y))
 
     if player_anim_count == 2:
         player_anim_count = 0
