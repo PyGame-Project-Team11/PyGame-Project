@@ -1,8 +1,9 @@
-import pygame
+import pygame, time
 
 clock = pygame.time.Clock()
 pygame.init()
-screen = pygame.display.set_mode((800, 600))
+SIZE = WIDTH, HEIGHT = 800, 600
+screen = pygame.display.set_mode(SIZE)
 pygame.display.set_caption("proj n11")
 # icon = pygame.image.load('images/icon.png')
 # pygame.display.set_icon(icon)
@@ -11,7 +12,7 @@ myfont = pygame.font.SysFont('comicsansms', 20)
 text_surface = myfont.render('some text', True, 'Red')
 
 background = pygame.image.load('images/background.png')
-background = pygame.transform.scale(background, (800, 600))
+background = pygame.transform.scale(background, SIZE)
 
 walk_left = [
     pygame.image.load('images/player_left/player_left1.png'),
@@ -55,11 +56,46 @@ class Player:
 
 player = Player()
 
+
 running = True
+# Start game
+start = True 
+start_font1 = pygame.font.SysFont('arial', 35)
+start_hi = start_font1.render('Hi!', True, (255, 255, 255))
+start_hi_rect = start_hi.get_rect()
+start_hi_rect.center = (WIDTH//2, HEIGHT//2)
+
+start_font2 = pygame.font.SysFont('arial', 20)
+start_text1 = start_font2.render('To play this game imagine that you are a student of KBTU from another city.', True, (255, 255, 255))
+start_text2 = start_font2.render('Try to survive until the end of semester.', True, (255, 255, 255))
+start_text3 = start_font2.render('Remember, every action has its own consequences.', True, (255, 255, 255))
+
+start_text1_rect = start_text1.get_rect()
+start_text1_rect.center = (WIDTH//2, HEIGHT//2-20)
+start_text2_rect = start_text1.get_rect()
+start_text2_rect.center = (WIDTH//2, HEIGHT//2)
+start_text3_rect = start_text1.get_rect()
+start_text3_rect.center = (WIDTH//2, HEIGHT//2+20)
+
 while running:
+    
+    while start:
+        screen.fill((0, 0, 0))
+        screen.blit(start_hi, start_hi_rect)
+        pygame.display.update()
+        time.sleep(1)
+        screen.fill((0, 0, 0))
+        screen.blit(start_text1, start_text1_rect)
+        screen.blit(start_text2, start_text2_rect)
+        screen.blit(start_text3, start_text3_rect)
+        
+        pygame.display.update()
+        time.sleep(2)
+        start = False
+    
     screen.blit(background, (0, 0))
     player.draw_stats(screen)
-
+    
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT] and player.pos_x > 0:
         player.pos_x -= player.speed
