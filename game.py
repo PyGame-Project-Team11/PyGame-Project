@@ -74,7 +74,14 @@ class Player:
             pygame.image.load('images/player/p_right.png'),
             pygame.image.load('images/player/p_right_move1.png'),
             pygame.image.load('images/player/p_right_move2.png')]
-        
+        self.walk_back = [
+            pygame.image.load('images/player/p_back.png'),
+            pygame.image.load('images/player/p_back_move1.png'),
+            pygame.image.load('images/player/p_back_move2.png')]
+        self.walk_forward = [
+            pygame.image.load('images/player/player.png'),
+            pygame.image.load('images/player/p_move1.png'),
+            pygame.image.load('images/player/p_move2.png')]
         
 
         self.friend_icon = pygame.image.load(
@@ -202,5 +209,5 @@ while running:
         screen.blit(player.walk_right[0], (player.pos_x, player.pos_y))
 
     pygame.display.update()
-    clock.tick(15)
+    clock.tick(20)
 pygame.quit()
