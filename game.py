@@ -1,4 +1,4 @@
-import pygame
+import pygame, time
 
 clock = pygame.time.Clock()
 pygame.init()
@@ -12,7 +12,7 @@ background_list = [
     {'image': 'images/hall.png'},
     {'image': 'images/street.png'}]
 backgrounds = [pygame.transform.scale(pygame.image.load(image['image']), (WIDTH, HEIGHT)) for image in background_list]
-current_background_index = 0
+current_background_index = 1
 current_background = backgrounds[current_background_index]
 current_background_changed = False
 
@@ -27,9 +27,9 @@ start_button_surf = myfont.render('Start', True, 'white')
 start_button = pygame.Rect(200, 200, 120, 60)
 start_button.center = (500, 460)
 
-start_transparent_surface = pygame.Surface((WIDTH*0.8, HEIGHT*0.8), pygame.SRCALPHA)
+start_transparent_surface = pygame.Surface((WIDTH * 0.8, HEIGHT * 0.8), pygame.SRCALPHA)
 start_transparent_surface.fill((200, 200, 200, 200))
-greeting = 1 #True
+greeting = 1  # True
 
 rules_button_surf = myfont.render('Rules', True, 'white')
 rules_button = pygame.Rect(200, 200, 100, 60)
@@ -37,16 +37,20 @@ rules_button.center = (WIDTH - 100, 50)
 
 rules_transparent_surface = pygame.Surface((650, 220), pygame.SRCALPHA)
 rules_transparent_surface.fill((200, 200, 200, 200))
-rules_show = 0 #False
+rules_show = 0  # False
 
 ok_button_surf = myfont.render('OK', True, 'white')
 ok_button = pygame.Rect(200, 200, 80, 40)
 ok_button.center = (840, 280)
 
+# text_transparent_surface = pygame.Surface((650, 220), pygame.SRCALPHA)
+# text_transparent_surface.fill((200, 200, 200, 200))
+
 player_anim_count = 0
 is_moving_left = False
 is_moving_right = False
 last_movement = True
+
 
 class Player:
 
@@ -58,13 +62,13 @@ class Player:
         self.friends = 0
         self.pos_x = 400
         self.pos_y = 420
-        self.speed = 10
+        self.speed = 15
 
         self.heart_full = pygame.image.load('images/stats/full_heart.png')
         self.heart_empty = pygame.image.load('images/stats/empty_heart.png')
         self.heart_width = self.heart_full.get_width()
         self.heart_height = self.heart_full.get_height()
-        
+
         # PLayer walk
         self.walk_left = [
             pygame.image.load('images/player/p_left.png'),
@@ -82,7 +86,6 @@ class Player:
             pygame.image.load('images/player/player.png'),
             pygame.image.load('images/player/p_move1.png'),
             pygame.image.load('images/player/p_move2.png')]
-        
 
         self.friend_icon = pygame.image.load(
             'images/stats/friends_icon.png')  # Load friend icon
@@ -113,6 +116,19 @@ class Player:
 
 player = Player()
 
+def background_change(n):
+    global current_background
+    screen.fill("black")
+    text_font = pygame.font.Font('fonts/static/PixelifySans-Bold.ttf', 40)
+    text = text_font.render("Moving to next location", True, (255, 255, 255))
+    text_rect = text.get_rect()
+    text_rect.center = (WIDTH//2, HEIGHT//2)
+    screen.blit(text, text_rect)
+    pygame.display.update()
+    time.sleep(0.5)
+    current_background = backgrounds[n]
+    return n
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -126,7 +142,21 @@ while running:
             if ok_button.collidepoint(event.pos):
                 rules_show = False
         elif event.type == pygame.KEYDOWN:
-            #to test to change background
+            if event.key == pygame.K_q:
+                current_background_index = background_change(current_background_index+1)
+                current_background_changed = True
+            if event.key == pygame.K_LEFT:
+                is_moving_left = True
+            if event.key == pygame.K_RIGHT:
+                is_moving_right = True
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                is_moving_left = False
+                last_movement = True
+            if event.key == pygame.K_RIGHT:
+                is_moving_right = False
+                last_movement = False
+            # to test to change background
             if event.key in key_mappings:
                 current_background_index = key_mappings[event.key]
                 current_background = backgrounds[current_background_index]
@@ -137,6 +167,8 @@ while running:
         HEIGHT = current_background.get_height()
         screen = pygame.display.set_mode((WIDTH, HEIGHT))
         current_background_changed = False
+
+    screen.fill("black")
     screen.blit(current_background, (0, 0))
 
     while greeting:
@@ -170,7 +202,7 @@ while running:
     screen.blit(rules_button_surf, (rules_button.x + 25, rules_button.y + 17))
 
     if rules_show:
-        screen.blit(rules_transparent_surface, (WIDTH*0.3, 100))
+        screen.blit(rules_transparent_surface, (WIDTH * 0.3, 100))
         rules_text = [
             "1. You must survive until 25 December 2023 ",
             "2. Your health status must not go below 30",
@@ -184,23 +216,14 @@ while running:
         pygame.draw.rect(screen, (100, 100, 100), ok_button)
         screen.blit(ok_button_surf, (ok_button.x + 24, ok_button.y + 8))
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT] and player.pos_x > 0:
-        player.pos_x -= player.speed
-        is_moving_left = True
-        last_movement = True
-    elif keys[pygame.K_RIGHT] and player.pos_x < WIDTH - 40:
+    if is_moving_right and not is_moving_left:
         player.pos_x += player.speed
-        is_moving_right = True
-        last_movement = False
-    else:
-        is_moving_left = False
-        is_moving_right = False
-
-    if is_moving_right:
+        player.pos_x = min(960, player.pos_x)
         screen.blit(player.walk_right[player_anim_count], (player.pos_x, player.pos_y))
         player_anim_count = (player_anim_count + 1) % len(player.walk_right)
-    elif is_moving_left:
+    elif is_moving_left and not is_moving_right:
+        player.pos_x -= player.speed
+        player.pos_x = max(0, player.pos_x)
         screen.blit(player.walk_left[player_anim_count], (player.pos_x, player.pos_y))
         player_anim_count = (player_anim_count + 1) % len(player.walk_left)
     elif last_movement:
@@ -208,6 +231,10 @@ while running:
     else:
         screen.blit(player.walk_right[0], (player.pos_x, player.pos_y))
 
+    #Game starts here
+    #Day 1 - Sep 4
+
+
     pygame.display.update()
-    clock.tick(20)
+    clock.tick(15)
 pygame.quit()
