@@ -35,7 +35,7 @@ rules_button_surf = myfont.render('Rules', True, 'white')
 rules_button = pygame.Rect(200, 200, 100, 60)
 rules_button.center = (WIDTH - 100, 50)
 
-rules_transparent_surface = pygame.Surface((620, 220), pygame.SRCALPHA)
+rules_transparent_surface = pygame.Surface((650, 220), pygame.SRCALPHA)
 rules_transparent_surface.fill((200, 200, 200, 200))
 rules_show = 0 #False
 
@@ -43,14 +43,6 @@ ok_button_surf = myfont.render('OK', True, 'white')
 ok_button = pygame.Rect(200, 200, 80, 40)
 ok_button.center = (840, 280)
 
-walk_left = [
-    pygame.image.load('images/player_left/player_left1.png'),
-    pygame.image.load('images/player_left/player_left2.png'),
-    pygame.image.load('images/player_left/player_left3.png')]
-walk_right = [
-    pygame.image.load('images/player_right/player_right1.png'),
-    pygame.image.load('images/player_right/player_right2.png'),
-    pygame.image.load('images/player_right/player_right3.png')]
 player_anim_count = 0
 is_moving_left = False
 is_moving_right = False
@@ -72,6 +64,18 @@ class Player:
         self.heart_empty = pygame.image.load('images/stats/empty_heart.png')
         self.heart_width = self.heart_full.get_width()
         self.heart_height = self.heart_full.get_height()
+        
+        # PLayer walk
+        self.walk_left = [
+            pygame.image.load('images/player/p_left.png'),
+            pygame.image.load('images/player/p_left_move1.png'),
+            pygame.image.load('images/player/p_left_move2.png')]
+        self.walk_right = [
+            pygame.image.load('images/player/p_right.png'),
+            pygame.image.load('images/player/p_right_move1.png'),
+            pygame.image.load('images/player/p_right_move2.png')]
+        
+        
 
         self.friend_icon = pygame.image.load(
             'images/stats/friends_icon.png')  # Load friend icon
@@ -187,15 +191,15 @@ while running:
         is_moving_right = False
 
     if is_moving_right:
-        screen.blit(walk_right[player_anim_count], (player.pos_x, player.pos_y))
-        player_anim_count = (player_anim_count + 1) % len(walk_right)
+        screen.blit(player.walk_right[player_anim_count], (player.pos_x, player.pos_y))
+        player_anim_count = (player_anim_count + 1) % len(player.walk_right)
     elif is_moving_left:
-        screen.blit(walk_left[player_anim_count], (player.pos_x, player.pos_y))
-        player_anim_count = (player_anim_count + 1) % len(walk_left)
+        screen.blit(player.walk_left[player_anim_count], (player.pos_x, player.pos_y))
+        player_anim_count = (player_anim_count + 1) % len(player.walk_left)
     elif last_movement:
-        screen.blit(walk_left[0], (player.pos_x, player.pos_y))
+        screen.blit(player.walk_left[0], (player.pos_x, player.pos_y))
     else:
-        screen.blit(walk_right[0], (player.pos_x, player.pos_y))
+        screen.blit(player.walk_right[0], (player.pos_x, player.pos_y))
 
     pygame.display.update()
     clock.tick(15)
