@@ -6,16 +6,23 @@ WIDTH, HEIGHT = 1000, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("proj n11")
 
-background1 = pygame.image.load('images/background.png')
-background1 = pygame.transform.scale(background1, (1000, 600))
-background2 = pygame.image.load('images/dorm.png')
-background3 = pygame.image.load('images/hall.png')
-background3 = pygame.transform.scale(background3, (1000, 600))
-background4 = pygame.image.load('images/street.png')
-background4 = pygame.transform.scale(background4, (1000, 600))
-backgrounds = [background1, background2, background3]
-current_background = background1
+background_list = [
+    {'image': 'images/background.png'},
+    {'image': 'images/dorm.png'},
+    {'image': 'images/hall.png'},
+    {'image': 'images/street.png'}
+]
+backgrounds = [pygame.transform.scale(pygame.image.load(image['image']), (WIDTH, HEIGHT)) for image in background_list]
+current_background_index = 0
+current_background = backgrounds[current_background_index]
 current_background_changed = False
+
+key_mappings = {
+    pygame.K_1: 0,
+    pygame.K_2: 1,
+    pygame.K_3: 2,
+    pygame.K_4: 3
+}
 
 # icon = pygame.image.load('images/icon.png')
 # pygame.display.set_icon(icon)
@@ -90,17 +97,9 @@ while running:
                 rules_show = False
         elif event.type == pygame.KEYDOWN:
             #to test to change background
-            if event.key == pygame.K_1:
-                current_background = background1
-                current_background_changed = True
-            if event.key == pygame.K_2:
-                current_background = background2
-                current_background_changed = True
-            if event.key == pygame.K_3:
-                current_background = background3
-                current_background_changed = True
-            if event.key == pygame.K_4:
-                current_background = background4
+            if event.key in key_mappings:
+                current_background_index = key_mappings[event.key]
+                current_background = backgrounds[current_background_index]
                 current_background_changed = True
 
     if current_background_changed:
