@@ -202,5 +202,5 @@ while running:
         screen.blit(player.walk_right[0], (player.pos_x, player.pos_y))
 
     pygame.display.update()
-    clock.tick(15)
+    clock.tick(10)
 pygame.quit()
