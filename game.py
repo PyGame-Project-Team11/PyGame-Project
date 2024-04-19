@@ -1,7 +1,5 @@
 import pygame, time
 
-start_time = 0
-
 clock = pygame.time.Clock()
 pygame.init()
 WIDTH, HEIGHT = 1000, 600
@@ -11,7 +9,7 @@ pygame.display.set_caption("proj n11")
 background_images = ['images/background.png', 'images/dorm.png', 'images/hall.png', 'images/street.png', 'images/kbtu_front.png']
 backgrounds = [pygame.transform.scale(pygame.image.load(image), (WIDTH, HEIGHT)) for image in background_images]
 
-current_background_index = 4
+current_background_index = 1
 current_background = backgrounds[current_background_index]
 current_background_changed = False
 
@@ -28,7 +26,7 @@ start_button.center = (500, 460)
 
 start_transparent_surface = pygame.Surface((WIDTH * 0.8, HEIGHT * 0.8), pygame.SRCALPHA)
 start_transparent_surface.fill((200, 200, 200, 200))
-greeting = 0  # True
+greeting = 1  # True
 
 rules_button_surf = myfont.render('Rules', True, 'white')
 rules_button = pygame.Rect(200, 200, 100, 60)
@@ -44,8 +42,8 @@ ok_button.center = (840, 280)
 
 option_choose = False
 option = False
-day2 = True
-day1, day3, day4, day5 = False, False, False, False
+day1 = True
+day2, day3, day4, day5 = False, False, False, False
 
 player_anim_count = 0
 is_moving_left = False
@@ -129,8 +127,6 @@ def background_change(n):
     time.sleep(0.5)
     current_background = backgrounds[n]
     return n
-
-start_time = pygame.time.get_ticks()
 
 running = True
 while running:
@@ -273,7 +269,7 @@ while running:
                 black_surf.fill((0,0,0,(i+1)/60*255))
                 screen.blit(black_surf, (0, 0))
                 pygame.display.update()
-                clock.tick(120) #60
+                clock.tick(60) #60
             screen.fill("black")
             text_font = pygame.font.Font('fonts/static/PixelifySans-Bold.ttf', 80)
             if option:
@@ -303,10 +299,9 @@ while running:
                 player.finances -= 100
                 player.happiness -= 5
             pygame.display.update()
-            time.sleep(0.5) #1.5
+            time.sleep(1.5) #1.5
             current_background = backgrounds[4]
             day2 = True
-            start_time = pygame.time.get_ticks()
             option_choose = False
             option = False
             day1 = False
@@ -320,7 +315,6 @@ while running:
         npc2 = pygame.transform.scale(npc2, (134 * 0.8, 164))
         screen.blit(npc1, (700, player.pos_y))
         screen.blit(npc2, (840, player.pos_y))
-        elapsed_time = pygame.time.get_ticks() - start_time
         if not 700-player.pos_x-50<80:
             text_transparent_surface = pygame.Surface((540, 150), pygame.SRCALPHA)
             text_transparent_surface.fill((230, 230, 230, 200))
@@ -387,7 +381,7 @@ while running:
                         text_surf = myfont.render(t, True, "white")
                         screen.blit(text_surf, (200, i * 40 + 100))
                 pygame.display.update()
-                time.sleep(2)  # 1.5
+                time.sleep(1.5)  # 1.5
                 current_background = backgrounds[0]
                 day2 = False
 
