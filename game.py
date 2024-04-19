@@ -234,10 +234,10 @@ while running:
     if rules_show:
         screen.blit(rules_transparent_surface, (WIDTH * 0.3, 100))
         rules_text = [
-            "1. You must survive until 25 December 2023 ",
-            "2. Your health status must not go below 30",
-            "3. Your grades must not go below 30",
-            "4. Every 4 weeks you will automatically get additional finances",
+            "1. You must survive until finals week. ",
+            "2. Your health status must not go below 30.",
+            "3. Your grades must not go below 30.",
+            "4. Every 4 weeks you will automatically get additional finances.",
             "5. Live your best student life!"
         ]
         for i, text in enumerate(rules_text):
@@ -339,9 +339,10 @@ while running:
             option = False
             day1 = False
 
-    # Day 2 - Sep 7
+    # Day 2 - Sep 18
     elif day2:
-        screen.blit(myfont2.render("September 7", True, "black"), (400, 10))
+        player.finances = 70985  
+        screen.blit(myfont2.render("September 18", True, "black"), (400, 10))
         npc1 = pygame.image.load('images/characters/f2_right.png')
         npc1 = pygame.transform.scale(npc1, (134 * 0.6, 164))
         npc2 = pygame.image.load('images/characters/f1_left.png')
@@ -354,8 +355,8 @@ while running:
             text_transparent_surface.fill((230, 230, 230, 200))
             screen.blit(text_transparent_surface, (200, 50))
             text = [
-                "time to get some friends?",
-                "try approaching them by pressing ->"
+                "Time to get some friends?",
+                "Try approaching them by pressing ->"
             ]
             for i, t in enumerate(text):
                 text_surf = myfont.render(t, True, (0, 0, 0))
@@ -398,7 +399,7 @@ while running:
                 # text_font = pygame.font.Font('fonts/static/PixelifySans-Bold.ttf', 80)
                 if option:
                     text = [
-                        "Nice choice!", "", "stats:", "+2 friends",
+                        "Nice choice!", "", "Stats:", "+2 friends",
                         "+5 happiness"
                     ]
                     for i, t in enumerate(text):
@@ -420,9 +421,10 @@ while running:
                 day2 = False
                 player.pos_x = 100
 
-    # Day 3 - Sep 14
+    # Day 3 - Sep 28
     elif day3:
-        screen.blit(myfont2.render("September 14", True, "black"), (400, 10))
+        player.finances = 55425
+        screen.blit(myfont2.render("September 28", True, "black"), (400, 10))
         poster = pygame.image.load('images/poster.png')
         screen.blit(poster, (740, 400))
         # pygame.draw.rect(screen, "white", (740, 400, 140, 160))
@@ -480,12 +482,12 @@ while running:
                 option_transparent_surface = pygame.Surface((500, 50),
                                                             pygame.SRCALPHA)
                 option_transparent_surface.fill((230, 230, 230, 200))
-                option1_surf = myfont.render("-sure, wanna try everything", True,
+                option1_surf = myfont.render("-Sure, wanna try everything", True,
                                              "black")
                 option1 = pygame.Rect(200, 250, 500, 50)
                 screen.blit(option_transparent_surface, (200, 250))
                 screen.blit(option1_surf, (230, 262))
-                option2_surf = myfont.render("-no, im good", True, "black")
+                option2_surf = myfont.render("-No, im good", True, "black")
                 option2 = pygame.Rect(200, 320, 500, 50)
                 screen.blit(option_transparent_surface, (200, 320))
                 screen.blit(option2_surf, (230, 332))
@@ -506,7 +508,7 @@ while running:
                     if option:
                         text = [
                             "Welcome to the club, we hope you will find a lot of friends!",
-                            "", "stats:", "+2 friends", "+10 happiness",
+                            "", "Stats:", "+2 friends", "+10 happiness",
                             "-5 health"
                         ]
                         for i, t in enumerate(text):
@@ -533,6 +535,7 @@ while running:
 
     #Day 4 - Oct 24
     elif day4:
+        player.finances = 87530
         screen.blit(myfont2.render("October 24", True, "black"), (400, 10))
         teacher = pygame.image.load('images/characters/teacher.png')
         teacher = pygame.transform.scale(teacher, (134 * 0.6, 164*0.6))
@@ -583,7 +586,7 @@ while running:
                     "You have violated the academic honesty policy!",
                     "For your action you have been expelled…..",
                     "just kidding, but try to do no more such thing!", "",
-                    "stats:", "-100 respect", "-15 grades", "-15 happiness"
+                    "Stats:", "-100 respect", "-15 grades", "-15 happiness"
                 ]
                 for i, t in enumerate(text):
                     text_surf = myfont.render(t, False, "white")
