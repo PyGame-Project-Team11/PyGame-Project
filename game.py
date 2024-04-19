@@ -1,22 +1,21 @@
 import pygame, time
 
+start_time = 0
+
 clock = pygame.time.Clock()
 pygame.init()
 WIDTH, HEIGHT = 1000, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("proj n11")
 
-background_list = [
-    {'image': 'images/background.png'},
-    {'image': 'images/dorm.png'},
-    {'image': 'images/hall.png'},
-    {'image': 'images/street.png'}]
-backgrounds = [pygame.transform.scale(pygame.image.load(image['image']), (WIDTH, HEIGHT)) for image in background_list]
-current_background_index = 1
+background_images = ['images/background.png', 'images/dorm.png', 'images/hall.png', 'images/street.png', 'images/kbtu_front.png']
+backgrounds = [pygame.transform.scale(pygame.image.load(image), (WIDTH, HEIGHT)) for image in background_images]
+
+current_background_index = 4
 current_background = backgrounds[current_background_index]
 current_background_changed = False
 
-key_mappings = {pygame.K_1: 0, pygame.K_2: 1, pygame.K_3: 2, pygame.K_4: 3}
+key_mappings = {pygame.K_1: 0, pygame.K_2: 1, pygame.K_3: 2, pygame.K_4: 3, pygame.K_5: 4}
 
 # icon = pygame.image.load('images/icon.png')
 # pygame.display.set_icon(icon)
@@ -45,7 +44,8 @@ ok_button.center = (840, 280)
 
 option_choose = False
 option = False
-day1 = True
+day2 = True
+day1, day3, day4, day5 = False, False, False, False
 
 player_anim_count = 0
 is_moving_left = False
@@ -129,6 +129,8 @@ def background_change(n):
     time.sleep(0.5)
     current_background = backgrounds[n]
     return n
+
+start_time = pygame.time.get_ticks()
 
 running = True
 while running:
@@ -271,7 +273,7 @@ while running:
                 black_surf.fill((0,0,0,(i+1)/60*255))
                 screen.blit(black_surf, (0, 0))
                 pygame.display.update()
-                clock.tick(60)
+                clock.tick(120) #60
             screen.fill("black")
             text_font = pygame.font.Font('fonts/static/PixelifySans-Bold.ttf', 80)
             if option:
@@ -301,9 +303,93 @@ while running:
                 player.finances -= 100
                 player.happiness -= 5
             pygame.display.update()
-            time.sleep(1.5)
-            current_background = backgrounds[0]
+            time.sleep(0.5) #1.5
+            current_background = backgrounds[4]
+            day2 = True
+            start_time = pygame.time.get_ticks()
+            option_choose = False
+            option = False
             day1 = False
+
+    #Day 2 - Sep 7
+    approach = False
+    if day2:
+        npc1 = pygame.image.load('images/characters/f2_right.png')
+        npc1 = pygame.transform.scale(npc1, (134*0.8, 164))
+        npc2 = pygame.image.load('images/characters/f1_left.png')
+        npc2 = pygame.transform.scale(npc2, (134 * 0.8, 164))
+        screen.blit(npc1, (700, player.pos_y))
+        screen.blit(npc2, (840, player.pos_y))
+        elapsed_time = pygame.time.get_ticks() - start_time
+        if not 700-player.pos_x-50<80:
+            text_transparent_surface = pygame.Surface((540, 150), pygame.SRCALPHA)
+            text_transparent_surface.fill((230, 230, 230, 200))
+            screen.blit(text_transparent_surface, (200, 50))
+            text = [
+                "time to get some friends?",
+                "try approaching them by pressing ->"]
+            for i, t in enumerate(text):
+                text_surf = myfont.render(t, True, (0, 0, 0))
+                screen.blit(text_surf, (220, i * 30 + 70))
+            pygame.display.update()
+
+        else:
+            text_transparent_surface = pygame.Surface((540, 150), pygame.SRCALPHA)
+            text_transparent_surface.fill((230, 230, 230, 200))
+            screen.blit(text_transparent_surface, (200, 50))
+            text = [
+                "Do you want to try to talk with them?"]
+            for i, t in enumerate(text):
+                text_surf = myfont.render(t, True, (0, 0, 0))
+                screen.blit(text_surf, (220, i * 30 + 70))
+            option_transparent_surface = pygame.Surface((500, 50), pygame.SRCALPHA)
+            option_transparent_surface.fill((230, 230, 230, 200))
+            option1_surf = myfont.render("-Yeah, let's do it", True, "black")
+            option1 = pygame.Rect(200, 250, 500, 50)
+            screen.blit(option_transparent_surface, (200, 250))
+            screen.blit(option1_surf, (230, 262))
+            option2_surf = myfont.render("Nah, I’m scared", True, "black")
+            option2 = pygame.Rect(200, 320, 500, 50)
+            screen.blit(option_transparent_surface, (200, 320))
+            screen.blit(option2_surf, (230, 332))
+
+            mouse_buttons = pygame.mouse.get_pressed()
+            if mouse_buttons[0]:
+                mouse_pos = pygame.mouse.get_pos()
+                if option1.collidepoint(mouse_pos):
+                    approach = False
+                    option_choose = True
+                    option = True
+                elif option2.collidepoint(mouse_pos):
+                    approach = False
+                    option_choose = True
+                    option = False
+
+            if option_choose:
+                screen.fill("black")
+                text_font = pygame.font.Font('fonts/static/PixelifySans-Bold.ttf', 80)
+                if option:
+                    text = [
+                        "Nice choice!",
+                        "",
+                        "stats:",
+                        "+2 friends",
+                        "+5 happiness"]
+                    for i, t in enumerate(text):
+                        text_surf = myfont.render(t, False, "white")
+                        screen.blit(text_surf, (200, i * 40 + 100))
+                    player.friends += 2
+                    player.happiness += 5
+                else:
+                    text = [
+                        "Maybe next time."]
+                    for i, t in enumerate(text):
+                        text_surf = myfont.render(t, True, "white")
+                        screen.blit(text_surf, (200, i * 40 + 100))
+                pygame.display.update()
+                time.sleep(2)  # 1.5
+                current_background = backgrounds[0]
+                day2 = False
 
     pygame.display.update()
     clock.tick(15)
