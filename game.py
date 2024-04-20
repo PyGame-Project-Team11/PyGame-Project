@@ -8,24 +8,14 @@ pygame.display.set_caption("proj n11")
 
 background_images = [
     'images/background.png', 'images/dorm.png', 'images/hall.png',
-    'images/street.png', 'images/kbtu_front.png'
+    'images/street.png', 'images/kbtu_front.png', 'images/floor.png'
 ]
 backgrounds = [
     pygame.transform.scale(pygame.image.load(image), (WIDTH, HEIGHT))
     for image in background_images
 ]
 
-current_background_index = 1  # 1
-current_background = backgrounds[current_background_index]
-current_background_changed = False
-
-key_mappings = {
-    pygame.K_1: 0,
-    pygame.K_2: 1,
-    pygame.K_3: 2,
-    pygame.K_4: 3,
-    pygame.K_5: 4
-}
+current_background = backgrounds[1] # 1
 
 # icon = pygame.image.load('images/icon.png')
 # pygame.display.set_icon(icon)
@@ -56,8 +46,8 @@ ok_button.center = (840, 280)
 
 option_choose = False
 option = False
-day7 = True
-day2 = day3 = day4 = day6 = day1 = day5 = day8 = False
+day1 = True
+day2 = day3 = day4 = day6 = day7 = day5 = day8 = False
 
 club_join = False
 jumping = False
@@ -74,6 +64,7 @@ for i in range(11):
     # litter.append([random.randint(100, 890), random.randint(0, 100)])
     litter.append([random.randint(200, 250), random.randint(0, 100)])
 collected = 0
+
 
 class Player:
 
@@ -102,16 +93,6 @@ class Player:
             pygame.image.load('images/player/p_right.png'),
             pygame.image.load('images/player/p_right_move1.png'),
             pygame.image.load('images/player/p_right_move2.png')
-        ]
-        self.walk_back = [
-            pygame.image.load('images/player/p_back.png'),
-            pygame.image.load('images/player/p_back_move1.png'),
-            pygame.image.load('images/player/p_back_move2.png')
-        ]
-        self.walk_forward = [
-            pygame.image.load('images/player/player.png'),
-            pygame.image.load('images/player/p_move1.png'),
-            pygame.image.load('images/player/p_move2.png')
         ]
 
         self.friend_icon = pygame.image.load(
@@ -174,6 +155,7 @@ def show_rules():
     pygame.draw.rect(screen, (100, 100, 100), ok_button)
     screen.blit(ok_button_surf, (ok_button.x + 24, ok_button.y + 8))
 
+
 def background_change(n):
     global current_background
     screen.fill("black")
@@ -186,6 +168,7 @@ def background_change(n):
     current_background = backgrounds[n]
     return n
 
+
 def blackout():
     black_surf = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
     for i in range(60):
@@ -193,6 +176,7 @@ def blackout():
         screen.blit(black_surf, (0, 0))
         pygame.display.update()
         clock.tick(60)  # 60
+
 
 running = True
 while running:
@@ -206,10 +190,6 @@ while running:
                 rules_show = False
 
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_q:
-                current_background_index = background_change(
-                    current_background_index + 1)
-                current_background_changed = True
             if event.key == pygame.K_LEFT:
                 is_moving_left = True
             if event.key == pygame.K_RIGHT:
@@ -223,19 +203,8 @@ while running:
             if event.key == pygame.K_RIGHT:
                 is_moving_right = False
                 last_movement = False
-            # to test to change background
-            if event.key in key_mappings:
-                current_background_index = key_mappings[event.key]
-                current_background = backgrounds[current_background_index]
-                current_background_changed = True
 
-    if current_background_changed:
-        WIDTH = current_background.get_width()
-        HEIGHT = current_background.get_height()
-        screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        current_background_changed = False
-
-    screen.fill("black")
+    # screen.fill("black")
     screen.blit(current_background, (0, 0))
 
     while greeting:
@@ -270,8 +239,6 @@ while running:
     pygame.draw.rect(screen, (100, 100, 100), rules_button)
     screen.blit(rules_button_surf, (rules_button.x + 25, rules_button.y + 17))
 
-    if rules_show:
-        show_rules()
 
     if is_moving_right and not is_moving_left and not day7:
         player.pos_x += player.speed
@@ -362,7 +329,7 @@ while running:
 
     # Day 2 - Sep 18
     elif day2:
-        player.finances = 70985  
+        player.finances = 70985
         screen.blit(myfont2.render("September 18", True, "black"), (400, 10))
         npc1 = pygame.image.load('images/characters/f2_right.png')
         npc1 = pygame.transform.scale(npc1, (134 * 0.6, 164))
@@ -436,7 +403,7 @@ while running:
                         screen.blit(text_surf, (200, i * 40 + 100))
                 pygame.display.update()
                 time.sleep(1.5)  # 1.5
-                current_background = backgrounds[4]
+                current_background = backgrounds[5]
                 day3 = True
                 option_choose = False
                 option = False
@@ -556,14 +523,14 @@ while running:
                     day3 = False
                     player.pos_x = 200
 
-    #Day 4 - Oct 24
+    # Day 4 - Oct 24
     elif day4:
         player.finances = 87530
         screen.blit(myfont2.render("October 24", True, "black"), (400, 10))
         teacher = pygame.image.load('images/characters/teacher.png')
-        teacher = pygame.transform.scale(teacher, (134 * 0.6, 164*0.6))
+        teacher = pygame.transform.scale(teacher, (134 * 0.6, 164 * 0.6))
         friend = pygame.image.load('images/characters/f1_left.png')
-        friend = pygame.transform.scale(friend, (134 * 0.6, 164*0.8))
+        friend = pygame.transform.scale(friend, (134 * 0.6, 164 * 0.8))
         screen.blit(teacher, (740, 280))
         screen.blit(friend, (840, player.pos_y))
         text_transparent_surface = pygame.Surface((540, 150), pygame.SRCALPHA)
@@ -626,7 +593,7 @@ while running:
             option = False
             day4 = False
 
-    #Day 5 - Oct 28
+    # Day 5 - Oct 28
     elif day5:
         player.finances = 76230
         screen.blit(myfont2.render("October 28", True, "black"), (400, 10))
@@ -686,7 +653,7 @@ while running:
             option = False
             day5 = False
 
-    #Day 6 - Oct 30
+    # Day 6 - Oct 30
     elif day6:
         player.finances = 72145
         screen.blit(myfont2.render("October 30", True, "black"), (400, 10))
@@ -706,7 +673,7 @@ while running:
             x = litter[collected][0]
             print(collected, x)
             pygame.draw.rect(screen, "red", (x, 450 + litter[collected][1], 10, 10))
-            if player.pos_x+50 >= x and player.pos_x <= x+10:
+            if player.pos_x + 50 >= x and player.pos_x <= x + 10:
                 collected += 1
                 pygame.display.update()
         else:
@@ -724,7 +691,7 @@ while running:
             day7 = True
             day6 = False
 
-    #Day 7 - Nov 4
+    # Day 7 - Nov 4
     elif day7:
         player.pos_x = 250
         current_background = backgrounds[0]
@@ -734,13 +701,13 @@ while running:
             start_bacgraund_pos += background_move_speed
         else:
             start_bacgraund_pos = 0
-        
+
         player_rect = player.walk_right[player_anim_count].get_rect()
-        player_rect.center = (player.pos_x, player.pos_y+50)
+        player_rect.center = (player.pos_x, player.pos_y + 50)
         screen.blit(player.walk_right[player_anim_count], player_rect)
         player_anim_count = (player_anim_count + 1) % len(player.walk_right)
         screen.blit(obstacle, obstacle_rect)
-        
+
         # pygame.draw.line(screen, (255, 255, 255), (0, 390), (1000, 390), 4)
         if jumping and player.pos_y > 330:
             player.pos_y -= jump_const
@@ -748,19 +715,22 @@ while running:
             if player.pos_y <= HEIGHT - 270:
                 jumping = False
                 print(player.pos_y)
-        
+
         if not jumping and player.pos_y < HEIGHT - 170:
-                player.pos_y += jump_const
-                jump_const += 2
-                jumping = False
+            player.pos_y += jump_const
+            jump_const += 2
+            jumping = False
         obstacle_rect.x -= obstacle_speed
         if obstacle_rect.right <= 0:
             obstacle_rect.left = WIDTH
             obstacle_speed += 0.5  # Increase obstacle speed over time
-        
+
         if obstacle_rect.colliderect(player_rect):
             print("Game Over!")
-        
+
+    if rules_show:
+        show_rules()
+
     pygame.display.update()
     clock.tick(15)
 pygame.quit()
