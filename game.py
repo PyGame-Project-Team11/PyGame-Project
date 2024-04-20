@@ -70,7 +70,7 @@ class Player:
 
     def __init__(self):
         self.health = 70
-        self.grades = 0
+        self.grades = 100
         self.happiness = 80
         self.finances = 100000
         self.friends = 0
