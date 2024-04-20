@@ -143,7 +143,7 @@ def show_rules():
     screen.blit(rules_surface, (WIDTH * 0.3, 100))
     rules_text = [
         "1. You must survive until finals week. ",
-        "2. Your health status must not go below 30.",
+        "2. Your health and happiness statuses must not go below 30.",
         "3. Your grades must not go below 30.",
         "4. Every 4 weeks you will automatically get additional finances.",
         "5. Live your best student life!"
@@ -397,10 +397,11 @@ while running:
                     player.friends += 2
                     player.happiness += 5
                 else:
-                    text = ["Maybe next time."]
+                    text = ["Maybe next time.", "", "Stats:", "-5 happiness"]
                     for i, t in enumerate(text):
                         text_surf = myfont.render(t, True, "white")
                         screen.blit(text_surf, (200, i * 40 + 100))
+                    player.happiness -=5
                 pygame.display.update()
                 time.sleep(1.5)  # 1.5
                 current_background = backgrounds[5]
@@ -571,7 +572,7 @@ while running:
                     "You have violated the academic honesty policy!",
                     "For your action you have been expelled…..",
                     "just kidding, but try to do no more such thing!", "",
-                    "Stats:", "-100 respect", "-15 grades", "-15 happiness"
+                    "Stats:", "-15 grades", "-15 happiness"
                 ]
                 for i, t in enumerate(text):
                     text_surf = myfont.render(t, False, "white")
@@ -580,11 +581,13 @@ while running:
                 player.happiness -= 15
             else:
                 text = [
-                    "You may be not the best friend, but definitely the best student"
+                    "You may be not the best friend, but definitely the best student", "",
+                    "Stats:", "-1 friend"
                 ]
                 for i, t in enumerate(text):
                     text_surf = myfont.render(t, True, "white")
                     screen.blit(text_surf, (200, i * 40 + 100))
+                player.friends -=1
             pygame.display.update()
             time.sleep(1.5)  # 1.5
             current_background = backgrounds[3]
@@ -633,18 +636,24 @@ while running:
             # text_font = pygame.font.Font('fonts/static/PixelifySans-Bold.ttf', 80)
             if option:
                 text = [
-                    "You were late anyways, there’s a punishment waiting for you"
+                    "You were late anyways, there’s a punishment waiting for you", "",
+                    "Stats:", "-10 health", "-10 happiness"
                 ]
                 for i, t in enumerate(text):
                     text_surf = myfont.render(t, False, "white")
                     screen.blit(text_surf, (200, i * 40 + 100))
+                player.health -=10
+                player.happiness -=10
             else:
                 text = [
-                    "You were late anyways, there’s a punishment waiting for you"
+                    "You were late anyways, there’s a punishment waiting for you", "",
+                    "Stats:", "-10 health", "-10 happiness"
                 ]
                 for i, t in enumerate(text):
                     text_surf = myfont.render(t, True, "white")
                     screen.blit(text_surf, (200, i * 40 + 100))
+                player.health -=10
+                player.happiness -=10
             pygame.display.update()
             time.sleep(1.5)  # 1.5
             current_background = backgrounds[0]
@@ -681,10 +690,12 @@ while running:
             screen.fill("black")
             # text_font = pygame.font.Font('fonts/static/PixelifySans-Bold.ttf', 80)
             text = [
-                "congrats, you completed your punishment"]
+                "Good job. We hope you learned your lesson.", "",
+                    "Stats:", "+5 health"]
             for i, t in enumerate(text):
                 text_surf = myfont.render(t, False, "white")
                 screen.blit(text_surf, (200, i * 40 + 100))
+            player.health +=5
             pygame.display.update()
             time.sleep(1.5)  # 1.5
             current_background = backgrounds[0]
@@ -693,6 +704,7 @@ while running:
 
     # Day 7 - Nov 4
     elif day7:
+        player.finances = 67565
         player.pos_x = 250
         current_background = backgrounds[0]
         screen.blit(backgrounds[0], (0 - start_bacgraund_pos, 0))
