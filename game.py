@@ -746,6 +746,7 @@ while running:
         else:
             if player.pos_y < HEIGHT - 170:
                 player.pos_y +=7
+                jumping = False
         obstacle_rect.x -= obstacle_speed
         if obstacle_rect.right <= 0:
             obstacle_rect.left = WIDTH
