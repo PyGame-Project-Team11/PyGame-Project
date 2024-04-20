@@ -741,17 +741,17 @@ while running:
         player_anim_count = (player_anim_count + 1) % len(player.walk_right)
         screen.blit(obstacle, obstacle_rect)
         
-        pygame.draw.line(screen, (255, 255, 255), (0, 390), (1000, 390), 4)
-        if jumping and player.pos_y > 300:
+        # pygame.draw.line(screen, (255, 255, 255), (0, 390), (1000, 390), 4)
+        if jumping and player.pos_y > 330:
             player.pos_y -= jump_const
-            jump_const -= 1
-            if player.pos_y <= HEIGHT - 300:
+            jump_const -= 2
+            if player.pos_y <= HEIGHT - 270:
                 jumping = False
                 print(player.pos_y)
         
         if not jumping and player.pos_y < HEIGHT - 170:
                 player.pos_y += jump_const
-                jump_const += 1
+                jump_const += 2
                 jumping = False
         obstacle_rect.x -= obstacle_speed
         if obstacle_rect.right <= 0:
