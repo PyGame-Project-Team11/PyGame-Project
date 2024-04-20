@@ -56,11 +56,11 @@ ok_button.center = (840, 280)
 
 option_choose = False
 option = False
-day1 = True
-day2 = day3 = day4 = day5 = day6 = day7 = day8 = False
+day5 = True
+day2 = day3 = day4 = day6 = day1 = day7 = day8 = False
 
 club_join = False
-
+jumping = False
 player_anim_count = 0
 is_moving_left = False
 is_moving_right = False
@@ -147,6 +147,12 @@ class Player:
 
 
 player = Player()
+obstacle = pygame.Surface((40, 40))
+obstacle_rect = obstacle.get_rect()
+obstacle_rect.center = (WIDTH, HEIGHT - 70)
+# obstacle_rect = pygame.Rect(WIDTH, HEIGHT - 100, 20, 40)
+obstacle_speed = 15
+
 
 def show_rules():
     screen.blit(rules_surface, (WIDTH * 0.3, 100))
@@ -204,6 +210,8 @@ while running:
                 is_moving_left = True
             if event.key == pygame.K_RIGHT:
                 is_moving_right = True
+            if event.key == pygame.K_SPACE and not jumping:
+                jumping = True
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 is_moving_left = False
@@ -261,21 +269,21 @@ while running:
     if rules_show:
         show_rules()
 
-    if is_moving_right and not is_moving_left:
+    if is_moving_right and not is_moving_left and not day7:
         player.pos_x += player.speed
         player.pos_x = min(950, player.pos_x)
         screen.blit(player.walk_right[player_anim_count],
                     (player.pos_x, player.pos_y))
         player_anim_count = (player_anim_count + 1) % len(player.walk_right)
-    elif is_moving_left and not is_moving_right:
+    elif is_moving_left and not is_moving_right and not day7:
         player.pos_x -= player.speed
         player.pos_x = max(0, player.pos_x)
         screen.blit(player.walk_left[player_anim_count],
                     (player.pos_x, player.pos_y))
         player_anim_count = (player_anim_count + 1) % len(player.walk_left)
-    elif last_movement:
+    elif last_movement and not day7:
         screen.blit(player.walk_left[0], (player.pos_x, player.pos_y))
-    else:
+    elif not day7:
         screen.blit(player.walk_right[0], (player.pos_x, player.pos_y))
 
     # Game starts here
@@ -713,9 +721,29 @@ while running:
             day6 = False
 
     #Day 7 - Nov 4
-    # elif day7:
-
-
+    elif day7:
+        player.pos_x = 250
+        current_background = backgrounds[0]
+        player_rect = player.walk_right[player_anim_count].get_rect()
+        player_rect.center = (player.pos_x, player.pos_y+50)
+        screen.blit(player.walk_right[player_anim_count], player_rect)
+        player_anim_count = (player_anim_count + 1) % len(player.walk_right)
+        screen.blit(obstacle, obstacle_rect)
+        if jumping and player.pos_y > 430 - 40:
+            player.pos_y -= 100
+            if player.pos_y <= HEIGHT -200:
+                jumping = False
+        else:
+            if player.pos_y < HEIGHT - 170:
+                player.pos_y +=10
+        obstacle_rect.x -= obstacle_speed
+        if obstacle_rect.right <= 0:
+            obstacle_rect.left = WIDTH
+            obstacle_speed += 0.5  # Increase obstacle speed over time
+        
+        if obstacle_rect.colliderect(player_rect):
+            print("Game Over!")
+        
     pygame.display.update()
     clock.tick(15)
 pygame.quit()
