@@ -66,7 +66,8 @@ is_moving_left = False
 is_moving_right = False
 last_movement = False
 start_bacgraund_pos = 0
-background_move_speed = 10
+background_move_speed = 20
+jump_const = 25
 
 litter = []
 for i in range(11):
@@ -154,7 +155,7 @@ obstacle = pygame.transform.scale(obstacle, (70, 50))
 obstacle_rect = obstacle.get_rect()
 obstacle_rect.center = (WIDTH, HEIGHT - 70)
 # obstacle_rect = pygame.Rect(WIDTH, HEIGHT - 100, 20, 40)
-obstacle_speed = 15
+obstacle_speed = 25
 
 
 def show_rules():
@@ -739,13 +740,18 @@ while running:
         screen.blit(player.walk_right[player_anim_count], player_rect)
         player_anim_count = (player_anim_count + 1) % len(player.walk_right)
         screen.blit(obstacle, obstacle_rect)
-        if jumping and player.pos_y > 430 - 40:
-            player.pos_y -= 100
-            if player.pos_y <= HEIGHT -200:
+        
+        pygame.draw.line(screen, (255, 255, 255), (0, 390), (1000, 390), 4)
+        if jumping and player.pos_y > 300:
+            player.pos_y -= jump_const
+            jump_const -= 1
+            if player.pos_y <= HEIGHT - 300:
                 jumping = False
-        else:
-            if player.pos_y < HEIGHT - 170:
-                player.pos_y +=7
+                print(player.pos_y)
+        
+        if not jumping and player.pos_y < HEIGHT - 170:
+                player.pos_y += jump_const
+                jump_const += 1
                 jumping = False
         obstacle_rect.x -= obstacle_speed
         if obstacle_rect.right <= 0:
