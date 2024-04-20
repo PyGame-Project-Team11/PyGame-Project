@@ -56,8 +56,8 @@ ok_button.center = (840, 280)
 
 option_choose = False
 option = False
-day5 = True
-day2 = day3 = day4 = day6 = day1 = day7 = day8 = False
+day7 = True
+day2 = day3 = day4 = day6 = day1 = day5 = day8 = False
 
 club_join = False
 jumping = False
@@ -65,6 +65,8 @@ player_anim_count = 0
 is_moving_left = False
 is_moving_right = False
 last_movement = False
+start_bacgraund_pos = 0
+background_move_speed = 10
 
 litter = []
 for i in range(11):
@@ -147,7 +149,8 @@ class Player:
 
 
 player = Player()
-obstacle = pygame.Surface((40, 40))
+obstacle = pygame.image.load('images/obstacle.png')
+obstacle = pygame.transform.scale(obstacle, (70, 50))
 obstacle_rect = obstacle.get_rect()
 obstacle_rect.center = (WIDTH, HEIGHT - 70)
 # obstacle_rect = pygame.Rect(WIDTH, HEIGHT - 100, 20, 40)
@@ -724,6 +727,13 @@ while running:
     elif day7:
         player.pos_x = 250
         current_background = backgrounds[0]
+        screen.blit(backgrounds[0], (0 - start_bacgraund_pos, 0))
+        screen.blit(backgrounds[0], (WIDTH - start_bacgraund_pos, 0))
+        if start_bacgraund_pos < WIDTH:
+            start_bacgraund_pos += background_move_speed
+        else:
+            start_bacgraund_pos = 0
+        
         player_rect = player.walk_right[player_anim_count].get_rect()
         player_rect.center = (player.pos_x, player.pos_y+50)
         screen.blit(player.walk_right[player_anim_count], player_rect)
@@ -735,7 +745,7 @@ while running:
                 jumping = False
         else:
             if player.pos_y < HEIGHT - 170:
-                player.pos_y +=10
+                player.pos_y +=7
         obstacle_rect.x -= obstacle_speed
         if obstacle_rect.right <= 0:
             obstacle_rect.left = WIDTH
