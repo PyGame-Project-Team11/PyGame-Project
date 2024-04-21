@@ -4,7 +4,7 @@ clock = pygame.time.Clock()
 pygame.init()
 WIDTH, HEIGHT = 1000, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("proj n11")
+pygame.display.set_caption("UniPixiLife")
 
 background_images = [
     'images/backgrounds/track.png', 'images/backgrounds/dorm.png',
@@ -171,6 +171,8 @@ class Player:
             self.happiness = 100
         if self.friends < 0:
             self.friends = 0
+        if self.grades > 100:
+            self.grades = 100
         return True
 
 
@@ -401,7 +403,7 @@ while running:
     elif day2:
         player.draw_stats(screen, (255, 255, 255))
         screen.blit(myfont2.render("September 18", True, "black"), (400, 10))
-        npc1 = pygame.image.load('images/characters/f2_right.png')
+        npc1 = pygame.image.load('images/characters/friend1.png')
         npc1 = pygame.transform.scale(npc1, (134 * 0.6, 164))
         npc2 = pygame.image.load('images/characters/f1_left.png')
         npc2 = pygame.transform.scale(npc2, (134 * 0.6, 164))
@@ -675,6 +677,7 @@ while running:
                 pygame.display.update()
                 time.sleep(1.5)
                 current_background = backgrounds[3]
+                player.pos_y = 330
                 day5 = True
                 option_choose = False
                 option = False
@@ -739,6 +742,7 @@ while running:
                 pygame.display.update()
                 time.sleep(1.5)
                 current_background = backgrounds[6]
+                player.pos_y = 400
                 day6 = True
                 option_choose = False
                 option = False
