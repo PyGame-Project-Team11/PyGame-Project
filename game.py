@@ -13,8 +13,15 @@ background_images = [
 backgrounds = [
     pygame.transform.scale(pygame.image.load(image), (WIDTH, HEIGHT))
     for image in background_images]
-
 current_background = backgrounds[1]  # 1
+
+litters = [
+    pygame.transform.scale(pygame.image.load('images/litter/litter1.PNG'), (24, 28)),
+    pygame.transform.scale(pygame.image.load('images/litter/litter2.PNG'), (24, 48)),
+    pygame.transform.scale(pygame.image.load('images/litter/litter3.PNG'), (24, 24))]
+litter_i = []
+for i in range(10):
+    litter_i.append(random.randint(0, 2))
 
 # icon = pygame.image.load('images/icon.png')
 # pygame.display.set_icon(icon)
@@ -46,7 +53,7 @@ ok_button.center = (840, 280)
 option_choose = False
 option = False
 day1 = True
-day2 = day3 = day4 = day5 = day7 = day6 = day8 = day9 = False
+day2 = day8 = day4 = day5 = day7 = day6 = day3 = day9 = False
 day7_started = False
 
 club_join = False
@@ -60,9 +67,9 @@ background_move_speed = 5
 jump_const = 20
 
 litter = []
-for i in range(11):
-    # litter.append([random.randint(100, 890), random.randint(0, 100)])
-    litter.append([random.randint(200, 250), random.randint(0, 100)])
+for i in range(10):
+    litter.append([random.randint(100, 890), random.randint(0, 80)])
+    # litter.append([random.randint(200, 250), random.randint(0, 80)])
 collected = 0
 
 obstacle = pygame.image.load('images/obstacle.png')
@@ -72,6 +79,7 @@ obstacle_rect.topleft = (WIDTH, HEIGHT - 80)
 # obstacle_rect = pygame.Rect(WIDTH, HEIGHT - 100, 20, 40)
 obstacle_speed = 30
 obstacles_count = 0
+
 
 class Player:
 
@@ -90,7 +98,6 @@ class Player:
         self.heart_width = self.heart_full.get_width()
         self.heart_height = self.heart_full.get_height()
 
-        # PLayer walk
         self.walk_left = [
             pygame.image.load('images/player/p_left.png'),
             pygame.image.load('images/player/p_left_move1.png'),
@@ -103,7 +110,7 @@ class Player:
         ]
 
         self.friend_icon = pygame.image.load(
-            'images/stats/friends_icon.png')  # Load friend icon
+            'images/stats/friends_icon.png')
         self.friend_icon_width = self.friend_icon.get_width()
         self.friend_icon_height = self.friend_icon.get_height()
 
@@ -113,8 +120,7 @@ class Player:
     def draw_stats(self, screen):
         # stats = [
         #     f"Grades: {self.grades}", f"Happiness: {self.happiness}",
-        #     f"Finances: {self.finances}k tg"
-        # ]
+        #     f"Finances: {self.finances}k tg"]
         # for i, stat in enumerate(stats):
         #     text_surface = myfont.render(stat, True, (255, 255, 255))
         #     screen.blit(text_surface, (20, i * 25 + 10))
@@ -138,6 +144,7 @@ class Player:
 
 
 player = Player()
+
 
 def show_rules():
     screen.blit(rules_surface, (WIDTH * 0.3, 100))
@@ -411,7 +418,7 @@ while running:
                     player.happiness -= 5
 
                 pygame.display.update()
-                time.sleep(1.5)  # 1.5
+                time.sleep(1.5)
                 current_background = backgrounds[5]
                 day3 = True
                 option_choose = False
@@ -445,8 +452,8 @@ while running:
                     "Student clubs and organizations in KBTU:",
                     "1. Big City Lights",
                     "2. Crystal",
-                    "3. StudEx",
-                    "4. ArtHouse",
+                    "3. ArtHouse",
+                    "4. StudEx",
                     "5. StartUp Incubator"]
                 for i, j in enumerate(poster_text):
                     text_surf = myfont.render(j, True, (0, 0, 0))
@@ -499,7 +506,7 @@ while running:
                     if option:
                         text = [
                             "Welcome to the club, we hope you will find a lot of friends!",
-                            "", "Stats:", "+2 friends", "+10 happiness","-5 health"]
+                            "", "Stats:", "+2 friends", "+10 happiness", "-5 health"]
                         for i, t in enumerate(text):
                             text_surf = myfont.render(t, False, "white")
                             screen.blit(text_surf, (200, i * 40 + 100))
@@ -512,7 +519,7 @@ while running:
                             text_surf = myfont.render(t, True, "white")
                             screen.blit(text_surf, (200, i * 40 + 100))
                     pygame.display.update()
-                    time.sleep(1.5)  # 1.5
+                    time.sleep(1.5)
                     current_background = backgrounds[2]
                     option = False
                     option_choose = False
@@ -581,7 +588,7 @@ while running:
                     screen.blit(text_surf, (200, i * 40 + 100))
                 player.friends -= 1
             pygame.display.update()
-            time.sleep(1.5)  # 1.5
+            time.sleep(1.5)
             current_background = backgrounds[3]
             day5 = True
             option_choose = False
@@ -626,14 +633,14 @@ while running:
             screen.fill("black")
             text = [
                 "You were late anyways, there’s a punishment waiting for you", "",
-                    "Stats:", "-10 health", "-10 happiness"]
+                "Stats:", "-10 health", "-10 happiness"]
             for i, t in enumerate(text):
                 text_surf = myfont.render(t, False, "white")
                 screen.blit(text_surf, (200, i * 40 + 100))
             player.health -= 10
             player.happiness -= 10
             pygame.display.update()
-            time.sleep(1.5)  # 1.5
+            time.sleep(1.5)
             current_background = backgrounds[6]
             day6 = True
             option_choose = False
@@ -655,10 +662,10 @@ while running:
         for i, t in enumerate(text):
             text_surf = myfont.render(t, True, (0, 0, 0))
             screen.blit(text_surf, (220, i * 30 + 70))
-        if collected <= 10:
+
+        if collected < 10:
             x = litter[collected][0]
-            # print(collected, x)
-            pygame.draw.rect(screen, "red", (x, 450 + litter[collected][1], 10, 10))
+            screen.blit(litters[litter_i[collected]], (x, 450 + litter[collected][1], 10, 10))
             if player.pos_x + 50 >= x and player.pos_x <= x + 10:
                 collected += 1
                 pygame.display.update()
@@ -673,7 +680,7 @@ while running:
                 screen.blit(text_surf, (200, i * 40 + 100))
             player.health += 5
             pygame.display.update()
-            time.sleep(1.5)  # 1.5
+            time.sleep(1.5)
             current_background = backgrounds[0]
             player.pos_x = 250
             day7 = True
@@ -724,7 +731,7 @@ while running:
             player.friends += 2
             player.health += 10
             pygame.display.update()
-            time.sleep(1.5)  # 1.5
+            time.sleep(1.5)
             current_background = backgrounds[1]
             day8 = True
             day7 = False
@@ -752,21 +759,102 @@ while running:
             screen.fill("black")
             text = [
                 "Wow! You are really something!", "",
-                    "Stats:", "+2 friends", "+10 health"]
+                "Stats:", "+2 friends", "+10 health"]
             for i, t in enumerate(text):
                 text_surf = myfont.render(t, False, "white")
                 screen.blit(text_surf, (200, i * 40 + 100))
             player.friends += 2
             player.health += 10
             pygame.display.update()
-            time.sleep(1.5)  # 1.5
+            time.sleep(1.5)
             current_background = backgrounds[1]
             day8 = True
             day7 = False
             day7_started = False
         clock.tick(60)
 
-    # elif day8:
+    # Day 8 - Dec 8
+    elif day8:
+        player.finances = 65030
+        screen.blit(myfont2.render("December 8", True, "black"), (400, 10))
+        text_transparent_surface = pygame.Surface((540, 150), pygame.SRCALPHA)
+        text_transparent_surface.fill((230, 230, 230, 200))
+        screen.blit(text_transparent_surface, (200, 50))
+        text = [
+            "Student government is throwing a party to",
+            "celebrate the New Year! All of your friends",
+            "are going!! The only thing is….. you have",
+            "a PP1 quiz the next day. Do you want to go anyways?"]
+        for i, t in enumerate(text):
+            text_surf = myfont.render(t, True, (0, 0, 0))
+            screen.blit(text_surf, (220, i * 30 + 70))
+        option_transparent_surface = pygame.Surface((500, 50), pygame.SRCALPHA)
+        option_transparent_surface.fill((230, 230, 230, 200))
+        option1_surf = myfont.render("I’m a PP1 genius, I’m not scared of some quiz", True, "black")
+        option1 = pygame.Rect(200, 250, 500, 50)
+        screen.blit(option_transparent_surface, (200, 250))
+        screen.blit(option1_surf, (230, 262))
+        option2_surf = myfont.render("-No, I don’t have time for personal life, I must study!", True, "black")
+        option2 = pygame.Rect(200, 320, 500, 50)
+        screen.blit(option_transparent_surface, (200, 320))
+        screen.blit(option2_surf, (230, 332))
+        mouse_buttons = pygame.mouse.get_pressed()
+        if mouse_buttons[0]:
+            mouse_pos = pygame.mouse.get_pos()
+            if option1.collidepoint(mouse_pos):
+                option_choose = True
+                option = True
+            elif option2.collidepoint(mouse_pos):
+                option_choose = True
+                option = False
+        if option_choose:
+            blackout()
+            screen.fill("black")
+            if option:
+                text = [
+                    "You have chosen the wrong way, Arnur agai is mad at you!",
+                    "", "Stats:", "+10 happiness", "+3 friends",
+                    "-10 grades", "-20 health"]
+                for i, t in enumerate(text):
+                    text_surf = myfont.render(t, False, "white")
+                    screen.blit(text_surf, (200, i * 40 + 100))
+                player.happiness += 10
+                player.friends += 3
+                player.grades -= 10
+                player.health -= 20
+
+            else:
+                text = [
+                    "Well, you may not be the party person, but now you definitely are the beast in C++",
+                    "", "Stats:", "-10 happiness", "+10 grades"]
+                for i, t in enumerate(text):
+                    text_surf = myfont.render(t, True, "white")
+                    screen.blit(text_surf, (200, i * 40 + 100))
+                player.happiness -= 10
+                player.grades += 10
+
+            pygame.display.update()
+            time.sleep(1.5)  # 1.5
+            current_background = backgrounds[4]
+            day9 = True
+            option_choose = False
+            option = False
+            day8 = False
+
+    #Day 9 - Dec 18
+    elif day9:
+        player.finances = 65030
+        screen.blit(myfont2.render("December 8", True, "black"), (400, 10))
+        text_transparent_surface = pygame.Surface((540, 150), pygame.SRCALPHA)
+        text_transparent_surface.fill((230, 230, 230, 200))
+        screen.blit(text_transparent_surface, (200, 50))
+        text = [
+            "Congratulations, you have survived until",
+            "the finals week! We wish you good luck and",
+            "life without retakes. Thank you for playing with us!"]
+        for i, t in enumerate(text):
+            text_surf = myfont.render(t, True, (0, 0, 0))
+            screen.blit(text_surf, (220, i * 30 + 70))
 
     if rules_show:
         show_rules()
