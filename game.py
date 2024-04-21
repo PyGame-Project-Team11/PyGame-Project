@@ -7,14 +7,14 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("proj n11")
 
 background_images = [
-    'backgrounds/images/track.png', 'backgrounds/images/dorm.png', 'backgrounds/images/hall.png',
-    'backgrounds/images/street.png', 'backgrounds/images/kbtu_front.png', 'backgrounds/images/floor.png',
-    'backgrounds/images/park.png']
+    'images/backgrounds/track.png', 'images/backgrounds/dorm.png', 'images/backgrounds/hall.png',
+    'images/backgrounds/street.png', 'images/backgrounds/kbtu_front.png', 'images/backgrounds/floor.png',
+    'images/backgrounds/park.png']
 backgrounds = [
     pygame.transform.scale(pygame.image.load(image), (WIDTH, HEIGHT))
     for image in background_images]
 
-current_background = backgrounds[0]  # 1
+current_background = backgrounds[1]  # 1
 
 # icon = pygame.image.load('images/icon.png')
 # pygame.display.set_icon(icon)
@@ -29,7 +29,7 @@ start_button.center = (500, 460)
 
 start_transparent_surface = pygame.Surface((WIDTH * 0.8, HEIGHT * 0.8), pygame.SRCALPHA)
 start_transparent_surface.fill((200, 200, 200, 200))
-greeting = 0  # True
+greeting = 1  # True
 
 rules_button_surf = myfont.render('Rules', True, 'white')
 rules_button = pygame.Rect(200, 200, 100, 60)
@@ -215,7 +215,7 @@ while running:
         screen.blit(current_background, (0, 0))
 
     while greeting:
-        screen.blit(backgrounds[0], (0, 0))
+        screen.blit(backgrounds[4], (0, 0))
         screen.blit(start_transparent_surface, (WIDTH * 0.1, HEIGHT * 0.1))
         greeting_text = [
             "Hi!", "To play this game imagine that you are a student",
@@ -236,6 +236,7 @@ while running:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.collidepoint(event.pos):
                     greeting = False
+                    blackout()
 
         pygame.display.update()
         clock.tick(15)
@@ -274,8 +275,7 @@ while running:
         text = [
             "Good morning, student, today is your first day!",
             "Unfortunately, you are running late",
-            "but you don’t want to miss everything, do you?"
-        ]
+            "but you don’t want to miss everything, do you?"]
         for i, t in enumerate(text):
             text_surf = myfont.render(t, True, (0, 0, 0))
             screen.blit(text_surf, (220, i * 30 + 70))
@@ -309,8 +309,7 @@ while running:
                 text = [
                     "You came in time and learned a lot of helpful information!",
                     "Now you are ready to start your life as a student", "",
-                    "Stats:", "-1230 tenge", "+5 happiness"
-                ]
+                    "Stats:", "-1230 tenge", "+5 happiness"]
                 for i, t in enumerate(text):
                     text_surf = myfont.render(t, False, "white")
                     screen.blit(text_surf, (200, i * 40 + 100))
@@ -321,8 +320,7 @@ while running:
                 text = [
                     "Unfortunately, you missed a lot of helpful information",
                     "that will be needed in future. Be careful next time!", "",
-                    "Stats:", "-100 tenge", "-5 happiness"
-                ]
+                    "Stats:", "-100 tenge", "-5 happiness"]
                 for i, t in enumerate(text):
                     text_surf = myfont.render(t, True, "white")
                     screen.blit(text_surf, (200, i * 40 + 100))
@@ -356,8 +354,7 @@ while running:
             screen.blit(text_transparent_surface, (200, 50))
             text = [
                 "Time to get some friends?",
-                "Try approaching them by pressing ->"
-            ]
+                "Try approaching them by pressing ->"]
             for i, t in enumerate(text):
                 text_surf = myfont.render(t, True, (0, 0, 0))
                 screen.blit(text_surf, (220, i * 30 + 70))
@@ -400,8 +397,7 @@ while running:
                 if option:
                     text = [
                         "Nice choice!", "", "Stats:", "+2 friends",
-                        "+5 happiness"
-                    ]
+                        "+5 happiness"]
                     for i, t in enumerate(text):
                         text_surf = myfont.render(t, False, "white")
                         screen.blit(text_surf, (200, i * 40 + 100))
@@ -427,17 +423,13 @@ while running:
     elif day3:
         player.finances = 55425
         screen.blit(myfont2.render("September 28", True, "black"), (400, 10))
-        poster = pygame.image.load('images/poster.png')
-        screen.blit(poster, (740, 400))
-
         if not 700 - player.pos_x - 50 < 80:
             text_transparent_surface = pygame.Surface((540, 150),
                                                       pygame.SRCALPHA)
             text_transparent_surface.fill((230, 230, 230, 200))
             screen.blit(text_transparent_surface, (200, 50))
             text = [
-                "What are these posters about?", "Try to come closer to see."
-            ]
+                "What are these posters about?", "Try to come closer to see."]
             for i, t in enumerate(text):
                 text_surf = myfont.render(t, True, (0, 0, 0))
                 screen.blit(text_surf, (220, i * 30 + 70))
@@ -445,7 +437,6 @@ while running:
             pygame.display.update()
 
         else:
-            # need to blit poster
             if not club_join:
                 poster_surface = pygame.Surface((540, 250), pygame.SRCALPHA)
                 poster_surface.fill((230, 230, 230, 200))
@@ -456,8 +447,7 @@ while running:
                     "2. Crystal",
                     "3. StudEx",
                     "4. ArtHouse",
-                    "5. StartUp Incubator"
-                ]
+                    "5. StartUp Incubator"]
                 for i, j in enumerate(poster_text):
                     text_surf = myfont.render(j, True, (0, 0, 0))
                     screen.blit(text_surf, (220, i * 30 + 70))
@@ -482,8 +472,7 @@ while running:
                 for i, t in enumerate(text):
                     text_surf = myfont.render(t, True, (0, 0, 0))
                     screen.blit(text_surf, (220, i * 30 + 70))
-                option_transparent_surface = pygame.Surface((500, 50),
-                                                            pygame.SRCALPHA)
+                option_transparent_surface = pygame.Surface((500, 50), pygame.SRCALPHA)
                 option_transparent_surface.fill((230, 230, 230, 200))
                 option1_surf = myfont.render("-Sure, wanna try everything", True, "black")
                 option1 = pygame.Rect(200, 250, 500, 50)
@@ -518,9 +507,7 @@ while running:
                         player.happiness += 10
                         player.health -= 5
                     else:
-                        text = [
-                            "Okay, but be careful, you must live your life to fullest."
-                        ]
+                        text = ["Okay, but be careful, you must live your life to fullest."]
                         for i, t in enumerate(text):
                             text_surf = myfont.render(t, True, "white")
                             screen.blit(text_surf, (200, i * 40 + 100))
@@ -548,8 +535,7 @@ while running:
         screen.blit(text_transparent_surface, (200, 50))
         text = [
             "You are writing a midterm test on Calculus.",
-            "Your friend asks for help? What do you do?"
-        ]
+            "Your friend asks for help? What do you do?"]
         for i, t in enumerate(text):
             text_surf = myfont.render(t, True, (0, 0, 0))
             screen.blit(text_surf, (220, i * 30 + 70))
@@ -580,8 +566,7 @@ while running:
                     "You have violated the academic honesty policy!",
                     "For your action you have been expelled…..",
                     "just kidding, but try to do no more such thing!", "",
-                    "Stats:", "-15 grades", "-15 happiness"
-                ]
+                    "Stats:", "-15 grades", "-15 happiness"]
                 for i, t in enumerate(text):
                     text_surf = myfont.render(t, False, "white")
                     screen.blit(text_surf, (200, i * 40 + 100))
@@ -590,8 +575,7 @@ while running:
             else:
                 text = [
                     "You may be not the best friend, but definitely the best student", "",
-                    "Stats:", "-1 friend"
-                ]
+                    "Stats:", "-1 friend"]
                 for i, t in enumerate(text):
                     text_surf = myfont.render(t, True, "white")
                     screen.blit(text_surf, (200, i * 40 + 100))
@@ -614,8 +598,7 @@ while running:
         text = [
             "You were wandering around Almaty, enjoying the views and",
             "genuinely having a nice evening, when suddenly you",
-            "discovered it is 11:28 pm and you’re 5km away from the dorm."
-        ]
+            "discovered it is 11:28 pm and you’re 5km away from the dorm."]
         for i, t in enumerate(text):
             text_surf = myfont.render(t, True, (0, 0, 0))
             screen.blit(text_surf, (220, i * 30 + 70))
@@ -643,8 +626,7 @@ while running:
             screen.fill("black")
             text = [
                 "You were late anyways, there’s a punishment waiting for you", "",
-                    "Stats:", "-10 health", "-10 happiness"
-            ]
+                    "Stats:", "-10 health", "-10 happiness"]
             for i, t in enumerate(text):
                 text_surf = myfont.render(t, False, "white")
                 screen.blit(text_surf, (200, i * 40 + 100))
@@ -669,8 +651,7 @@ while running:
             "For your sins(coming late) it was decided to make",
             "your punishment as community service to the dorm",
             "and its environment. You were sentenced to",
-            "collect litter around campus."
-        ]
+            "collect litter around campus."]
         for i, t in enumerate(text):
             text_surf = myfont.render(t, True, (0, 0, 0))
             screen.blit(text_surf, (220, i * 30 + 70))
@@ -709,8 +690,7 @@ while running:
             "While you were serving time cleaning off campus,",
             "2 seniors asked you to join them for competitions",
             "next week. You said “why not?”.",
-            "Now you have to represent FIT. Good luck!"
-        ]
+            "Now you have to represent FIT. Good luck!"]
         for i, t in enumerate(text):
             text_surf = myfont.render(t, True, (0, 0, 0))
             screen.blit(text_surf, (220, i * 30 + 70))
@@ -785,8 +765,8 @@ while running:
             day7 = False
             day7_started = False
         clock.tick(60)
-    # elif day8:
 
+    # elif day8:
 
     if rules_show:
         show_rules()
