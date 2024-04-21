@@ -67,7 +67,7 @@ losetext_rect.center = (WIDTH // 2, HEIGHT // 2)
 option_choose = False
 option = False
 day1 = True
-day2 = day8 = day4 = day5 = day7 = day6 = day3 = day9 = False
+day2 = day3 = day4 = day5 = day6 = day7 = day8 = day9 = False
 day7_started = False
 
 club_join = False
@@ -77,8 +77,8 @@ is_moving_left = False
 is_moving_right = False
 last_movement = False
 start_background_pos = 0
-background_move_speed = 5
-jump_const = 20
+background_move_speed = 10
+jump_const = 17
 
 litter = []
 for i in range(10):
@@ -386,7 +386,7 @@ while running:
 
             if player.check_stats() == True:
                 pygame.display.update()
-                time.sleep(1.5)  # 1.5
+                time.sleep(2)
                 current_background = backgrounds[4]
                 player.pos_x = 100
                 day2 = True
@@ -436,7 +436,7 @@ while running:
             option_transparent_surface = pygame.Surface((500, 50),
                                                         pygame.SRCALPHA)
             option_transparent_surface.fill((230, 230, 230, 200))
-            option1_surf = myfont.render("-Yeah, let's do it", True, "black")
+            option1_surf = myfont.render("Yeah, let's do it", True, "black")
             option1 = pygame.Rect(200, 250, 500, 50)
             screen.blit(option_transparent_surface, (200, 250))
             screen.blit(option1_surf, (230, 262))
@@ -478,7 +478,7 @@ while running:
                 if player.check_stats() == True:
                     pygame.display.update()
                     pygame.display.update()
-                    time.sleep(1.5)
+                    time.sleep(2)
                     current_background = backgrounds[5]
                     day3 = True
                     option_choose = False
@@ -547,12 +547,12 @@ while running:
                 option_transparent_surface = pygame.Surface((500, 50),
                                                             pygame.SRCALPHA)
                 option_transparent_surface.fill((230, 230, 230, 200))
-                option1_surf = myfont.render("-Sure, wanna try everything",
+                option1_surf = myfont.render("Sure, wanna try everything",
                                              True, "black")
                 option1 = pygame.Rect(200, 250, 500, 50)
                 screen.blit(option_transparent_surface, (200, 250))
                 screen.blit(option1_surf, (230, 262))
-                option2_surf = myfont.render("-No, im good", True, "black")
+                option2_surf = myfont.render("No, im good", True, "black")
                 option2 = pygame.Rect(200, 320, 500, 50)
                 screen.blit(option_transparent_surface, (200, 320))
                 screen.blit(option2_surf, (230, 332))
@@ -592,7 +592,7 @@ while running:
 
                     if player.check_stats() == True:
                         pygame.display.update()
-                        time.sleep(1.5)
+                        time.sleep(2)
                         current_background = backgrounds[2]
                         option = False
                         option_choose = False
@@ -625,11 +625,11 @@ while running:
             screen.blit(text_surf, (220, i * 30 + 70))
         option_transparent_surface = pygame.Surface((500, 50), pygame.SRCALPHA)
         option_transparent_surface.fill((230, 230, 230, 200))
-        option1_surf = myfont.render("-Sure I'll help him!", True, "black")
+        option1_surf = myfont.render("Sure I'll help him!", True, "black")
         option1 = pygame.Rect(200, 250, 500, 50)
         screen.blit(option_transparent_surface, (200, 250))
         screen.blit(option1_surf, (230, 262))
-        option2_surf = myfont.render("-Nahh, let the bro be cooked", True,
+        option2_surf = myfont.render("Nahh, let the bro be cooked", True,
                                      "black")
         option2 = pygame.Rect(200, 320, 500, 50)
         screen.blit(option_transparent_surface, (200, 320))
@@ -673,7 +673,7 @@ while running:
 
             if player.check_stats() == True:
                 pygame.display.update()
-                time.sleep(1.5)
+                time.sleep(2)
                 current_background = backgrounds[3]
                 player.pos_y = 330
                 day5 = True
@@ -738,7 +738,7 @@ while running:
 
             if player.check_stats() == True:
                 pygame.display.update()
-                time.sleep(1.5)
+                time.sleep(2)
                 current_background = backgrounds[6]
                 player.pos_y = 400
                 day6 = True
@@ -789,7 +789,7 @@ while running:
 
             if player.check_stats() == True:
                 pygame.display.update()
-                time.sleep(1.5)
+                time.sleep(2)
                 current_background = backgrounds[0]
                 player.pos_x = 250
                 day7 = True
@@ -819,7 +819,7 @@ while running:
 
         if not day7_started:
             pygame.display.update()
-            time.sleep(1.5)
+            time.sleep(2)
             day7_started = True
 
         player_rect = player.walk_right[player_anim_count].get_rect()
@@ -827,7 +827,8 @@ while running:
         screen.blit(player.walk_right[player_anim_count], player_rect.topleft)
         player_anim_count = (player_anim_count + 1) % len(player.walk_right)
         screen.blit(obstacle, obstacle_rect.topleft)
-        # pygame.draw.rect(screen, "white", (obstacle_rect.left, obstacle_rect.top, obstacle_rect.width, obstacle_rect.height))
+        # pygame.draw.rect(screen, "white", (obstacle_rect.left, obstacle_rect.top, obstacle_rect.width, obstacle_rect.height), 1)
+        # pygame.draw.rect(screen, "black", (player_rect.left, player_rect.top, player_rect.width, player_rect.height), 1)
 
         if obstacle_rect.colliderect(player_rect):
             blackout()
@@ -848,14 +849,14 @@ while running:
             player.friends += 2
             player.health += 10
             pygame.display.update()
-            time.sleep(1.5)
+            time.sleep(2)
             current_background = backgrounds[1]
             day8 = True
             day7 = False
             day7_started = False
             # screen.blit(myfont2.render("Game over", 1, "black"), (400, 100))]
 
-        if jumping and player.pos_y > 330:
+        if jumping and player.pos_y > 250:
             player.pos_y -= jump_const
             if player.pos_y <= HEIGHT - 270:
                 jumping = False
@@ -867,7 +868,7 @@ while running:
         if obstacle_rect.right <= 0:
             obstacles_count += 1
             obstacle_rect.left = WIDTH
-            obstacle_speed += 0.5
+            obstacle_speed += 1
 
         screen.blit(
             myfont2.render(f"Obstacles passed - {obstacles_count}", 1,
@@ -889,7 +890,7 @@ while running:
 
             if player.check_stats() == True:
                 pygame.display.update()
-                time.sleep(1.5)
+                time.sleep(2)
                 current_background = backgrounds[1]
                 day8 = True
                 day7 = False
@@ -927,7 +928,7 @@ while running:
         screen.blit(option_transparent_surface, (200, 250))
         screen.blit(option1_surf, (230, 262))
         option2_surf = myfont.render(
-            "-No, I don’t have time for personal life, I must study!", True,
+            "No, I don’t have time for personal life, I must study!", True,
             "black")
         option2 = pygame.Rect(200, 320, 600, 50)
         screen.blit(option_transparent_surface, (200, 320))
@@ -975,7 +976,7 @@ while running:
 
             if player.check_stats() == True:
                 pygame.display.update()
-                time.sleep(1.5)  # 1.5
+                time.sleep(2)  # 1.5
                 current_background = backgrounds[4]
                 day9 = True
                 option_choose = False
