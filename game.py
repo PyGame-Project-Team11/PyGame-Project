@@ -113,22 +113,22 @@ class Player:
         self.heart_height = self.heart_full.get_height()
 
         self.walk_left = [
-            pygame.image.load('images/main_charac/mc.l1.png'),
-            pygame.image.load('images/main_charac/mc.l2.png'),
-            pygame.image.load('images/main_charac/mc.l3.png'),
-            pygame.image.load('images/main_charac/mc.l4.png'),
-            pygame.image.load('images/main_charac/mc.l5.png'),
-            pygame.image.load('images/main_charac/mc.l6.png'),
-            pygame.image.load('images/main_charac/mc.l7.png'),
+            pygame.image.load('images/main_charac/mc_l1.png'),
+            pygame.image.load('images/main_charac/mc_l2.png'),
+            pygame.image.load('images/main_charac/mc_l3.png'),
+            pygame.image.load('images/main_charac/mc_l4.png'),
+            pygame.image.load('images/main_charac/mc_l5.png'),
+            pygame.image.load('images/main_charac/mc_l6.png'),
+            pygame.image.load('images/main_charac/mc_l7.png'),
         ]
         self.walk_right = [
-            pygame.image.load('images/main_charac/mc.r1.png'),
-            pygame.image.load('images/main_charac/mc.r2.png'),
-            pygame.image.load('images/main_charac/mc.r3.png'),
-            pygame.image.load('images/main_charac/mc.r4.png'),
-            pygame.image.load('images/main_charac/mc.r5.png'),
-            pygame.image.load('images/main_charac/mc.r6.png'),
-            pygame.image.load('images/main_charac/mc.r7.png')
+            pygame.image.load('images/main_charac/mc_r1.png'),
+            pygame.image.load('images/main_charac/mc_r2.png'),
+            pygame.image.load('images/main_charac/mc_r3.png'),
+            pygame.image.load('images/main_charac/mc_r4.png'),
+            pygame.image.load('images/main_charac/mc_r5.png'),
+            pygame.image.load('images/main_charac/mc_r6.png'),
+            pygame.image.load('images/main_charac/mc_r7.png')
         ]
 
         self.friend_icon = pygame.image.load('images/stats/friends_icon.png')
