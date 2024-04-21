@@ -30,8 +30,8 @@ litter_i = []
 for i in range(10):
     litter_i.append(random.randint(0, 2))
 
-# icon = pygame.image.load('images/icon.png')
-# pygame.display.set_icon(icon)
+icon = pygame.image.load('images/icon.png')
+pygame.display.set_icon(icon)
 
 myfont = pygame.font.Font('fonts/static/PixelifySans-Bold.ttf', 20)
 myfont2 = pygame.font.Font('fonts/static/PixelifySans-Bold.ttf', 30)
@@ -405,7 +405,7 @@ while running:
         screen.blit(myfont2.render("September 18", True, "black"), (400, 10))
         npc1 = pygame.image.load('images/characters/friend1.png')
         npc1 = pygame.transform.scale(npc1, (134 * 0.6, 164))
-        npc2 = pygame.image.load('images/characters/f1_left.png')
+        npc2 = pygame.image.load('images/characters/friend2.png')
         npc2 = pygame.transform.scale(npc2, (134 * 0.6, 164))
         screen.blit(npc1, (700, player.pos_y))
         screen.blit(npc2, (840, player.pos_y))
@@ -609,10 +609,8 @@ while running:
     elif day4:
         player.draw_stats(screen, (255, 255, 255))
         screen.blit(myfont2.render("October 24", True, "black"), (400, 10))
-        teacher = pygame.image.load('images/characters/teacher.png')
-        teacher = pygame.transform.scale(teacher, (134 * 0.6, 164 * 0.6))
-        friend = pygame.image.load('images/characters/f1_left.png')
-        friend = pygame.transform.scale(friend, (134 * 0.6, 164 * 0.8))
+        teacher = pygame.image.load('images/characters/teacher2.png')
+        friend = pygame.image.load('images/characters/friend2.png')
         screen.blit(teacher, (740, 280))
         screen.blit(friend, (840, player.pos_y))
         text_transparent_surface = pygame.Surface((540, 150), pygame.SRCALPHA)
