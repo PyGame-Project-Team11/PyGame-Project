@@ -80,6 +80,10 @@ start_background_pos = 0
 background_move_speed = 10
 jump_const = 17
 
+pygame.mixer.music.load('sounds/back_music.mp3')
+pygame.mixer.music.play()
+
+
 litter = []
 for i in range(10):
     litter.append([random.randint(100, 890), random.randint(0, 80)])
@@ -651,8 +655,7 @@ while running:
                     "You have violated the academic honesty policy!",
                     "For your action you have been expelled…..",
                     "just kidding, but try to do no more such thing!", "",
-                    "Stats:", "-20 grades", "-25 happiness", "",
-                    "Scholarship: +41800"
+                    "Stats:", "-20 grades", "-25 happiness", ""
                 ]
                 for i, t in enumerate(text):
                     text_surf = myfont.render(t, False, "white")
@@ -662,7 +665,7 @@ while running:
             else:
                 text = [
                     "You may be not the best friend, but definitely the best student",
-                    "", "Stats:", "-1 friend", "", "Scholarship: +41800"
+                    "", "Stats:", "-1 friend"
                 ]
                 for i, t in enumerate(text):
                     text_surf = myfont.render(t, True, "white")
@@ -792,6 +795,8 @@ while running:
                 time.sleep(2)
                 current_background = backgrounds[0]
                 player.pos_x = 250
+                pygame.mixer.music.load('sounds/day7_music.mp3')
+                pygame.mixer.music.play(-1)
                 day7 = True
                 day6 = False
             else:
@@ -852,6 +857,8 @@ while running:
             time.sleep(2)
             current_background = backgrounds[1]
             day8 = True
+            pygame.mixer.music.load('sounds/back_music.mp3')
+            pygame.mixer.music.play(-1)
             day7 = False
             day7_started = False
             # screen.blit(myfont2.render("Game over", 1, "black"), (400, 100))]
@@ -867,6 +874,7 @@ while running:
         obstacle_rect.x -= obstacle_speed
         if obstacle_rect.right <= 0:
             obstacles_count += 1
+            pygame.mixer.Sound('sounds/day7_sound.mp3').play()
             obstacle_rect.left = WIDTH
             obstacle_speed += 1
 
@@ -949,7 +957,7 @@ while running:
                 text = [
                     "You have chosen the wrong way, Arnur agai is mad at you!",
                     "", "Stats:", "+10 happiness", "+3 friends", "-20 grades",
-                    "-20 health", "-5000 tenge", "", "Scholarship: +41800"
+                    "-20 health", "-5000 tenge"
                 ]
                 for i, t in enumerate(text):
                     text_surf = myfont.render(t, False, "white")
@@ -963,8 +971,7 @@ while running:
             else:
                 text = [
                     "Well, you may not be the party person, but now you definitely are the beast in C++",
-                    "", "Stats:", "-10 happiness", "+10 grades", "",
-                    "Scholarship: +41800"
+                    "", "Stats:", "-10 happiness", "+10 grades", ""
                 ]
                 for i, t in enumerate(text):
                     text_surf = myfont.render(t, True, "white")
@@ -1008,5 +1015,5 @@ while running:
         show_rules()
 
     pygame.display.update()
-    clock.tick(15)
+    clock.tick(20)
 pygame.quit()
