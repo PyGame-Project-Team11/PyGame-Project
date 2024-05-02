@@ -66,8 +66,9 @@ losetext_rect.center = (WIDTH // 2, HEIGHT // 2)
 
 option_choose = False
 option = False
-day3 = True
-day2 = day1 = day4 = day5 = day6 = day7 = day8 = day9 = False
+game1 = game2 = game3 = False
+extra_day1 = True
+day1 = day2 = day3 = day4 = day5 = day6 = day7 = day8 = day9 = False
 day7_started = False
 
 club_join = False
@@ -397,7 +398,7 @@ while running:
 
             if player.check_stats() == True:
                 pygame.display.update()
-                time.sleep(2)
+                time.sleep(3.5)
                 current_background = backgrounds[4]
                 player.pos_x = 100
                 day2 = True
@@ -407,7 +408,7 @@ while running:
             else:
                 lose_screen()
                 pygame.display.flip()
-                time.sleep(2)
+                time.sleep(3.5)
                 break
 
     # Day 2 - Sep 18
@@ -489,7 +490,7 @@ while running:
                 if player.check_stats() == True:
                     pygame.display.update()
                     pygame.display.update()
-                    time.sleep(2)
+                    time.sleep(3.5)
                     current_background = backgrounds[5]
                     day3 = True
                     option_choose = False
@@ -499,7 +500,7 @@ while running:
                 else:
                     lose_screen()
                     pygame.display.flip()
-                    time.sleep(2)
+                    time.sleep(3.5)
                     break
 
     # Day 3 - Sep 28
@@ -635,7 +636,7 @@ while running:
                         screen.blit(text_surf, (200, i * 40 + 100))
                 if player.check_stats() == True:
                     pygame.display.update()
-                    time.sleep(2)
+                    time.sleep(3.5)
                     current_background = backgrounds[2]
                     option = False
                     option_choose = False
@@ -645,7 +646,7 @@ while running:
                 else:
                     lose_screen()
                     pygame.display.flip()
-                    time.sleep(2)
+                    time.sleep(3.5)
                     break
 
     # Day 4 - Oct 24
@@ -715,7 +716,7 @@ while running:
 
             if player.check_stats() == True:
                 pygame.display.update()
-                time.sleep(2)
+                time.sleep(3.5)
                 current_background = backgrounds[3]
                 player.pos_y = 330
                 day5 = True
@@ -725,8 +726,87 @@ while running:
             else:
                 lose_screen()
                 pygame.display.flip()
-                time.sleep(2)
+                time.sleep(3.5)
                 break
+
+    elif extra_day1:
+        player.draw_stats(screen, (255, 255, 255))
+        screen.blit(myfont2.render("October 26", True, "black"), (400, 10))
+
+        text_transparent_surface = pygame.Surface((540, 150), pygame.SRCALPHA)
+        text_transparent_surface.fill((230, 230, 230, 200))
+        screen.blit(text_transparent_surface, (200, 50))
+
+        text = [
+            "BCL is throwing a party on Halloween, ",
+            "you have been told to sell tickets."
+        ]
+        for i, t in enumerate(text):
+            text_surf = myfont.render(t, True, (0, 0, 0))
+            screen.blit(text_surf, (220, i * 30 + 70))
+
+        option_transparent_surface = pygame.Surface((500, 50), pygame.SRCALPHA)
+        option_transparent_surface.fill((230, 230, 230, 200))
+        option1_surf = myfont.render("Spend all day trying to find buyers.",
+                                     True, "black")
+        option1 = pygame.Rect(200, 250, 500, 50)
+        screen.blit(option_transparent_surface, (200, 250))
+        screen.blit(option1_surf, (230, 262))
+
+        option2_surf = myfont.render("Ignore the request.", True, "black")
+        option2 = pygame.Rect(200, 320, 500, 50)
+        screen.blit(option_transparent_surface, (200, 320))
+        screen.blit(option2_surf, (230, 332))
+
+        mouse_buttons = pygame.mouse.get_pressed()
+        if mouse_buttons[0]:
+            mouse_pos = pygame.mouse.get_pos()
+            if option1.collidepoint(mouse_pos):
+                option_choose = True
+                option = True
+            elif option2.collidepoint(mouse_pos):
+                option_choose = True
+                option = False
+        if option_choose:
+            blackout()
+            screen.fill("black")
+            if option:
+                text = [
+                    "Whack a Mole ", "The more Hits,", "The more Tickets sold"
+                ]
+                for i, t in enumerate(text):
+                    text_surf = myfont.render(t, False, "white")
+                    screen.blit(text_surf, (200, i * 40 + 100))
+                game1 = True
+            else:
+                text = [
+                    "BCL takes this party very seriously, ",
+                    "so you were expelled from organization for not making efforts.",
+                    "Stats:", "-2 friend"
+                ]
+                for i, t in enumerate(text):
+                    text_surf = myfont.render(t, True, "white")
+                    screen.blit(text_surf, (200, i * 40 + 100))
+                player.friends -= 2
+                player.club = None
+
+                if player.check_stats() == True:
+                    pygame.display.update()
+                    time.sleep(3.5)
+                    current_background = backgrounds[3]
+                    player.pos_y = 330
+                    day5 = True
+                    option_choose = False
+                    option = False
+                    day4 = False
+                else:
+                    lose_screen()
+                    pygame.display.flip()
+                    time.sleep(3.5)
+                    break
+
+        if game1:
+            break
 
     # Day 5 - Oct 28
     elif day5:
@@ -780,7 +860,7 @@ while running:
 
             if player.check_stats() == True:
                 pygame.display.update()
-                time.sleep(2)
+                time.sleep(3.5)
                 current_background = backgrounds[6]
                 player.pos_y = 400
                 day6 = True
@@ -790,7 +870,7 @@ while running:
             else:
                 lose_screen()
                 pygame.display.flip()
-                time.sleep(2)
+                time.sleep(3.5)
                 break
 
     # Day 6 - Oct 30
@@ -831,7 +911,7 @@ while running:
 
             if player.check_stats() == True:
                 pygame.display.update()
-                time.sleep(2)
+                time.sleep(3.5)
                 current_background = backgrounds[0]
                 player.pos_x = 250
                 pygame.mixer.music.load('sounds/day7_music.mp3')
@@ -841,7 +921,7 @@ while running:
             else:
                 lose_screen()
                 pygame.display.flip()
-                time.sleep(2)
+                time.sleep(3.5)
                 break
 
     # Day 7 - Nov 4
@@ -863,7 +943,7 @@ while running:
 
         if not day7_started:
             pygame.display.update()
-            time.sleep(2)
+            time.sleep(3.5)
             day7_started = True
 
         player_rect = player.walk_right[player_anim_count].get_rect()
@@ -893,7 +973,7 @@ while running:
             player.friends += 2
             player.health += 10
             pygame.display.update()
-            time.sleep(2)
+            time.sleep(3.5)
             current_background = backgrounds[1]
             day8 = True
             pygame.mixer.music.load('sounds/back_music.mp3')
@@ -937,7 +1017,7 @@ while running:
 
             if player.check_stats() == True:
                 pygame.display.update()
-                time.sleep(2)
+                time.sleep(3.5)
                 current_background = backgrounds[1]
                 day8 = True
                 day7 = False
@@ -945,7 +1025,7 @@ while running:
             else:
                 lose_screen()
                 pygame.display.flip()
-                time.sleep(2)
+                time.sleep(3.5)
                 break
 
         clock.tick(60)
@@ -1022,7 +1102,7 @@ while running:
 
             if player.check_stats() == True:
                 pygame.display.update()
-                time.sleep(2)  # 1.5
+                time.sleep(3.5)  # 1.5
                 current_background = backgrounds[4]
                 day9 = True
                 option_choose = False
@@ -1031,7 +1111,7 @@ while running:
             else:
                 lose_screen()
                 pygame.display.flip()
-                time.sleep(2)
+                time.sleep(3.5)
                 break
 
     #Day 9 - Dec 18
