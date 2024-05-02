@@ -66,8 +66,8 @@ losetext_rect.center = (WIDTH // 2, HEIGHT // 2)
 
 option_choose = False
 option = False
-day1 = True
-day2 = day3 = day4 = day5 = day6 = day7 = day8 = day9 = False
+day3 = True
+day2 = day1 = day4 = day5 = day6 = day7 = day8 = day9 = False
 day7_started = False
 
 club_join = False
@@ -510,11 +510,14 @@ while running:
             for i, t in enumerate(text):
                 text_surf = myfont.render(t, True, (0, 0, 0))
                 screen.blit(text_surf, (220, i * 30 + 70))
+            clubs = True
             club_join = False
+            club_choose = False
+            
             pygame.display.update()
 
         else:
-            if not club_join:
+            if clubs:
                 poster_surface = pygame.Surface((540, 250), pygame.SRCALPHA)
                 poster_surface.fill((230, 230, 230, 200))
                 screen.blit(poster_surface, (200, 50))
@@ -529,7 +532,7 @@ while running:
 
                 exit_button_surf = myfont.render('x', True, 'white')
                 exit_button = pygame.Rect(700, 250, 40, 40)
-                exit_button.center = (722, 280)
+                exit_button.center = (720, 280)
                 pygame.draw.rect(screen, (0, 0, 0), exit_button)
                 screen.blit(exit_button_surf,
                             (exit_button.x + 14, exit_button.y + 7))
@@ -539,6 +542,7 @@ while running:
                     mouse_pos = pygame.mouse.get_pos()
                     if exit_button.collidepoint(mouse_pos):
                         club_join = True
+                        clubs = False
             if club_join:
                 text_transparent_surface = pygame.Surface((540, 150),
                                                           pygame.SRCALPHA)
@@ -553,6 +557,7 @@ while running:
                 option_transparent_surface.fill((230, 230, 230, 200))
                 option1_surf = myfont.render("Sure, wanna try everything",
                                              True, "black")
+                
                 option1 = pygame.Rect(200, 250, 500, 50)
                 screen.blit(option_transparent_surface, (200, 250))
                 screen.blit(option1_surf, (230, 262))
@@ -565,12 +570,76 @@ while running:
                 if mouse_buttons[0]:
                     mouse_pos = pygame.mouse.get_pos()
                     if option1.collidepoint(mouse_pos):
-                        option_choose = True
-                        option = True
+                        # option_choose = True
+                        # option = True
+                        option_choose = False
+                        club_choose = True
+                        club_join = False
+                        
                     elif option2.collidepoint(mouse_pos):
                         option_choose = True
                         option = False
-
+                        club_join = False
+                        
+                
+            if club_choose:
+                text_transparent_surface = pygame.Surface((540, 60),
+                                                        pygame.SRCALPHA)
+                text_transparent_surface.fill((230, 230, 230, 200))
+                screen.blit(text_transparent_surface, (200, 50))
+                text = ["Choose"]
+                for i, t in enumerate(text):
+                    text_surf = myfont.render(t, True, (0, 0, 0))
+                    screen.blit(text_surf, (220, i * 30 + 70))
+                option_transparent_surface = pygame.Surface((500, 50),
+                                                            pygame.SRCALPHA)
+                option_transparent_surface.fill((230, 230, 230, 200))
+                
+                club1_surf = myfont.render("1. Big City Lights", True, "black")
+                club1 = pygame.Rect(200, 120, 500, 50)
+                screen.blit(option_transparent_surface, (200, 120))
+                screen.blit(club1_surf, (230, 132))
+                
+                club2_surf = myfont.render("2. Crystal", True, "black")
+                club2 = pygame.Rect(200, 180, 500, 50)
+                screen.blit(option_transparent_surface, (200, 180))
+                screen.blit(club2_surf, (230, 192))
+                
+                club3_surf = myfont.render("3. StudEx", True, "black")
+                club3 = pygame.Rect(200, 240, 500, 50)
+                screen.blit(option_transparent_surface, (200, 240))
+                screen.blit(club3_surf, (230, 252))
+                            
+                club4_surf = myfont.render("4. ArtHouse", True, "black")
+                club4 = pygame.Rect(200, 300, 500, 50)
+                screen.blit(option_transparent_surface, (200, 300))
+                screen.blit(club4_surf, (230, 312))
+                            
+                club5_surf = myfont.render("5. StartUp Incubator", True, "black")
+                club5 = pygame.Rect(200, 360, 500, 50)
+                screen.blit(option_transparent_surface, (200, 360))
+                screen.blit(club5_surf, (230, 372))
+                
+                mouse_buttons = pygame.mouse.get_pressed()
+                if mouse_buttons[0]:
+                    mouse_pos = pygame.mouse.get_pos()
+                    if club1.collidepoint(mouse_pos):
+                        option_choose = True
+                        option = True
+                    elif club2.collidepoint(mouse_pos):
+                        option_choose = True
+                        option = True
+                    elif club3.collidepoint(mouse_pos):
+                        option_choose = True
+                        option = True
+                    elif club4.collidepoint(mouse_pos):
+                        option_choose = True
+                        option = True
+                    elif club5.collidepoint(mouse_pos):
+                        option_choose = True
+                        option = True
+                        
+                        
                 if option_choose:
                     blackout()
                     screen.fill("black")
