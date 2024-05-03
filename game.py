@@ -10,7 +10,8 @@ background_images = [
     'images/backgrounds/track.png', 'images/backgrounds/dorm.png',
     'images/backgrounds/hall.png', 'images/backgrounds/street.png',
     'images/backgrounds/kbtu_front.png', 'images/backgrounds/floor.png',
-    'images/backgrounds/park.png', 'images/backgrounds/crystal.png'
+    'images/backgrounds/park.png', 'images/backgrounds/crystal.png', 
+    'images/backgrounds/art.png'
 ]
 backgrounds = [
     pygame.transform.scale(pygame.image.load(image), (WIDTH, HEIGHT))
@@ -68,9 +69,9 @@ losetext_rect.center = (WIDTH // 2, HEIGHT // 2)
 
 option_choose = False
 option = False
-game1 = game2 = game3 = False
-extra_day2 = True
-day4 = day2 = day3 = extra_day1 = extra_day3 = day1 = day5 = day6 = day7 = day8 = day9 = False
+game1 = game2 = game3 = game4 = False
+extra_day3 = True
+day4 = day2 = day3 = extra_day1 = extra_day2 = day1 = day5 = day6 = day7 = day8 = day9 = False
 day7_started = False
 
 club_join = False
@@ -211,12 +212,14 @@ def is_empty(hole):
     return not hole[2]
 
 # random letter render
-def display_random_letter():
-    random_letter = chr(random.randint(97, 122)) 
-    text = myfont3.render(random_letter, True, 'white')
-    text_rect = text.get_rect(center=(WIDTH/2 + 20, HEIGHT/2 - 70))
-    screen.blit(text, text_rect)
-    return random_letter
+# def display_random_letter():
+#     random_letter = chr(random.randint(97, 122)) 
+#     text = myfont3.render(random_letter, True, 'white')
+#     text_rect = text.get_rect(center=(WIDTH/2 + 20, HEIGHT/2 - 70))
+#     screen.blit(text, text_rect)
+#     return random_letter
+random_letter = chr(random.randint(97, 122))
+
 
 def create_mole():
     empty_holes = [hole for hole in holes if is_empty(hole)]
@@ -1293,40 +1296,145 @@ while running:
                             
     # Arthause 9nov
     elif extra_day3:
-        current_background = backgrounds[7]
-        letter = display_random_letter()
-        pressed_keys = pygame.key.get_pressed()
-        screen.blit(myfont2.render("Score: {}".format(score_in_artgame), True, "white"), (WIDTH/2 - 230, HEIGHT/2 - 20))
-        pygame.display.update()
-        waiting_for_input = True
-        while waiting_for_input:
+        player.draw_stats(screen, (255, 255, 255))
+        screen.blit(myfont2.render("November 9", True, "black"), (400, 10))
+
+        text_transparent_surface = pygame.Surface((540, 120), pygame.SRCALPHA)
+        text_transparent_surface.fill((230, 230, 230, 200))
+        screen.blit(text_transparent_surface, (200, 50))
+
+        text = [
+            "ArtHouse is making rehearsals before a big event ",
+            "coming in the 2nd semester. You coming?"
+        ]
+        for i, t in enumerate(text):
+            text_surf = myfont.render(t, True, (0, 0, 0))
+            screen.blit(text_surf, (220, i * 30 + 70))
+        
+        option_transparent_surface = pygame.Surface((500, 50), pygame.SRCALPHA)
+        option_transparent_surface.fill((230, 230, 230, 200))
+        option1_surf = myfont.render("Sure, I wanna be ready.", True,
+                                     "black")
+        option1 = pygame.Rect(200, 200, 500, 50)
+        screen.blit(option_transparent_surface, (200, 200))
+        screen.blit(option1_surf, (230, 212))
+        option2_surf = myfont.render("No, I think I’ll skip this one.", True,
+                                     "black")
+        option2 = pygame.Rect(200, 270, 500, 50)
+        screen.blit(option_transparent_surface, (200, 270))
+        screen.blit(option2_surf, (230, 282))
+        
+        mouse_buttons = pygame.mouse.get_pressed()
+        if mouse_buttons[0]:
+            mouse_pos = pygame.mouse.get_pos()
+            if option1.collidepoint(mouse_pos):
+                option_choose = True
+                option = True
+            elif option2.collidepoint(mouse_pos):
+                option_choose = True
+                option = False
+                
+        if option_choose:
+            blackout()
+            screen.fill("black")
+            if option:
+                pygame.display.update()
+                time.sleep(2)
+                current_background = backgrounds[8]
+                option_choose = False
+                option = False
+                game3 = True
+            else:
+                text = [
+                    "ArtHouse have decided that you are not ready enough,", "you are not participating anymore :("
+                ]
+                for i, t in enumerate(text):
+                    text_surf = myfont.render(t, False, "white")
+                    screen.blit(text_surf, (200, i * 40 + 100))
+                pygame.display.update()
+                time.sleep(1)
+                current_background = backgrounds[1]
+                extra_day3 = False
+                option_choose = False
+                option = False
+                day8 = True
+        
+        while game3:
+            screen.fill((0, 0, 0))
+            art_backgraund = pygame.transform.scale(pygame.image.load('images/backgrounds/art.png'), (WIDTH, HEIGHT))
+            screen.blit(art_backgraund, (0, 0))
+
+            screen.blit(myfont3.render(random_letter, True, "white"), (WIDTH/2 - 70, HEIGHT/2 - 100))
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                    pygame.quit()
+                    game3 = False
                     sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if rules_button.collidepoint(event.pos):
+                        rules_show = True
+                    if is_inside(ok_button, event.pos):
+                        rules_show = False
+
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LEFT:
+                        is_moving_left = True
+                    if event.key == pygame.K_RIGHT:
+                        is_moving_right = True
+                    if event.key == pygame.K_SPACE and not jumping:
+                        jumping = True
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_LEFT:
+                        is_moving_left = False
+                        last_movement = True
+                    if event.key == pygame.K_RIGHT:
+                        is_moving_right = False
+                        last_movement = False
+                        
                 if event.type == pygame.KEYDOWN:
                     pressed_key = event.key
                     if pygame.K_a <= pressed_key <= pygame.K_z:
                         pressed_letter = chr(pressed_key)
-                        if pressed_letter == letter:
+                        if pressed_letter == random_letter:
                             score_in_artgame += 1
+                            random_letter = chr(random.randint(97, 122))                        
                             print(score_in_artgame)
-                            waiting_for_input = False
-                        else:
-                            waiting_for_input = True
-        if score_in_artgame == 10:
-            if player.check_stats() == True:
-                pygame.display.update()
-                time.sleep(2)
-                current_background = backgrounds[1]
-                day9 = True
-                day8 = False
-            else:
-                lose_screen()
-                pygame.display.flip()
-                time.sleep(3.5)
-                break
+            
+            if is_moving_right and not is_moving_left and not day7:
+                player.pos_x += player.speed
+                player.pos_x = min(950, player.pos_x)
+                screen.blit(player.walk_right[player_anim_count],
+                            (player.pos_x, player.pos_y))
+                player_anim_count = (player_anim_count + 1) % len(player.walk_right)
+
+            elif is_moving_left and not is_moving_right and not day7:
+                player.pos_x -= player.speed
+                player.pos_x = max(0, player.pos_x)
+                screen.blit(player.walk_left[player_anim_count],
+                            (player.pos_x, player.pos_y))
+                player_anim_count = (player_anim_count + 1) % len(player.walk_left)
+
+            elif last_movement and not day7_started:
+                screen.blit(player.walk_left[0], (player.pos_x, player.pos_y))
+            elif not day7_started:
+                screen.blit(player.walk_right[0], (player.pos_x, player.pos_y))
+    
+            screen.blit(myfont2.render("Score: {}".format(score_in_artgame), True, "white"), (WIDTH/2 - 230, HEIGHT/2 - 20))
+            pygame.display.update()
+            if score_in_artgame == 10:
+                if player.check_stats() == True:
+                    pygame.display.update()
+                    time.sleep(2)
+                    current_background = backgrounds[1]
+                    day8 = True
+                    extra_day3 = False
+                    game3 = False
+                else:
+                    lose_screen()
+                    pygame.display.flip()
+                    time.sleep(3.5)
+                    break
 
     # Day 8 - Dec 8
     elif day8:
