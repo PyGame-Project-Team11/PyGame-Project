@@ -98,6 +98,13 @@ obstacle_rect.topleft = (WIDTH, HEIGHT - 80)
 obstacle_speed = 30
 obstacles_count = 0
 
+mole_images = [
+    pygame.image.load('images/game1/mole1.png').convert_alpha(),
+    pygame.image.load('images/game1/mole2.png').convert_alpha(),
+    pygame.image.load('images/game1/mole3.png').convert_alpha()
+]
+block_image = pygame.image.load('images/game1/computer.png').convert_alpha()
+
 
 class Player:
 
@@ -183,6 +190,41 @@ class Player:
 
 
 player = Player()
+
+mole_appear_chance = 0.05
+mole_display_time = 2
+score = 0
+time_limit = 30
+start_time = time.time()
+game_over = False
+
+# List to hold moles
+moles = []
+
+holes = [(250, 150, False), (450, 150, False), (650, 150, False),
+         (250, 300, False), (450, 300, False), (650, 300, False)]
+
+
+def is_empty(hole):
+    return not hole[2]
+
+
+def create_mole():
+    empty_holes = [hole for hole in holes if is_empty(hole)]
+    if empty_holes:
+        hole = random.choice(empty_holes)
+        image = random.choice(mole_images)
+        hole_index = holes.index(hole)
+        holes[hole_index] = (hole[0], hole[1], True)
+        return {
+            "x": hole[0],
+            "y": hole[1],
+            "image": image,
+            "visible": True,
+            "timer": mole_display_time
+        }
+    else:
+        return None
 
 
 def is_inside(rect, pos):
@@ -777,7 +819,12 @@ while running:
                 for i, t in enumerate(text):
                     text_surf = myfont.render(t, False, "white")
                     screen.blit(text_surf, (200, i * 40 + 100))
+
+                pygame.display.update()
+                time.sleep(3.5)
                 game1 = True
+                option_choose = False
+                option = False
             else:
                 text = [
                     "BCL takes this party very seriously, ",
@@ -806,7 +853,69 @@ while running:
                     break
 
         if game1:
-            break
+            screen.fill((158, 193, 219))
+
+            current_time = time.time()
+            if current_time - start_time >= time_limit:
+                game_over = True
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.MOUSEBUTTONDOWN and not game_over:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    for mole in moles:
+                        if mole["visible"]:
+                            mole_rect = mole["image"].get_rect(
+                                topleft=(mole["x"], mole["y"]))
+                            if mole_rect.collidepoint(mouse_x, mouse_y):
+                                score += 1
+                                mole["visible"] = False
+
+                                for i, hole in enumerate(holes):
+                                    if (hole[0], hole[1]) == (mole["x"],
+                                                              mole["y"]):
+                                        holes[i] = (hole[0], hole[1], False)
+
+            if not game_over:
+                if random.random() < mole_appear_chance:
+                    new_mole = create_mole()
+                    if new_mole is not None:
+                        moles.append(new_mole)
+
+            for mole in moles:
+                if mole["visible"]:
+                    screen.blit(mole["image"], (mole["x"], mole["y"]))
+                    mole["timer"] -= 1 / 60
+                    if mole["timer"] <= 0:
+                        mole["visible"] = False
+                        for i, hole in enumerate(holes):
+                            if (hole[0], hole[1]) == (mole["x"], mole["y"]):
+                                holes[i] = (hole[0], hole[1], False)
+
+            moles = [mole for mole in moles if mole["visible"]]
+
+            score_text = myfont.render(f"Score: {score}", True, (255, 0, 0))
+            screen.blit(score_text, (10, 10))
+
+            if not game_over:
+                time_left = int(time_limit - (current_time - start_time))
+                time_text = myfont.render(f"Time Left: {time_left}s", True,
+                                          (255, 0, 0))
+                screen.blit(time_text, (600, 10))
+
+            for hole in holes:
+                block_rect = block_image.get_rect(center=(hole[0],
+                                                          hole[1] + 110))
+                screen.blit(block_image, block_rect)
+
+            if game_over:
+                game_over_text = myfont.render("Game Over", True, (255, 0, 0))
+                screen.blit(game_over_text,
+                            (WIDTH // 2 - 100, HEIGHT // 2 - 50))
+                final_score_text = myfont.render(f"Final Score: {score}", True,
+                                                 (255, 0, 0))
+                screen.blit(final_score_text, (WIDTH // 2 - 120, HEIGHT // 2))
 
     # Day 5 - Oct 28
     elif day5:
