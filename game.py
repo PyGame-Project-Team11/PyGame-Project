@@ -67,9 +67,8 @@ losetext_rect.center = (WIDTH // 2, HEIGHT // 2)
 option_choose = False
 option = False
 game1 = game2 = game3 = False
-extra_day1 = False
 day4 = True
-day1 = day2 = day3 = day5 = day6 = day7 = day8 = day9 = False
+day1 = day2 = day3 = extra_day1 = day5 = day6 = day7 = day8 = day9 = False
 day7_started = False
 
 club_join = False
@@ -824,7 +823,6 @@ while running:
                 pygame.display.update()
                 time.sleep(3.5)
                 game1 = True
-                extra_day1 = False
                 option_choose = False
                 option = False
             else:
@@ -847,83 +845,90 @@ while running:
                     day5 = True
                     option_choose = False
                     option = False
-                    extra_day1 = False
+                    day4 = False
                 else:
                     lose_screen()
                     pygame.display.flip()
                     time.sleep(3.5)
                     break
 
-    if game1:
-        screen.fill((158, 193, 219))
+        while game1:
+            screen.fill((158, 193, 219))
 
-        current_time = time.time()
-        if current_time - start_time >= time_limit:
-            game_over = True
+            # Check if time is up
+            current_time = time.time()
+            if current_time - start_time >= time_limit:
+                game_over = True
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN and not game_over:
-                mouse_x, mouse_y = pygame.mouse.get_pos()
-                for mole in moles:
-                    if mole["visible"]:
-                        mole_rect = mole["image"].get_rect(
-                            topleft=(mole["x"], mole["y"]))
-                        if mole_rect.collidepoint(mouse_x, mouse_y):
-                            score += 1
-                            mole["visible"] = False
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.MOUSEBUTTONDOWN and not game_over:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    for mole in moles:
+                        if mole["visible"]:
+                            mole_rect = mole["image"].get_rect(topleft=(mole["x"], mole["y"]))
+                            if mole_rect.collidepoint(mouse_x, mouse_y):
+                                score += 1
+                                mole["visible"] = False
+                                # Find the corresponding hole and set its third parameter to False
+                                for i, hole in enumerate(holes):
+                                    if (hole[0], hole[1]) == (mole["x"], mole["y"]):
+                                        holes[i] = (hole[0], hole[1], False)
 
-                            for i, hole in enumerate(holes):
-                                if (hole[0], hole[1]) == (mole["x"],
-                                                          mole["y"]):
-                                    holes[i] = (hole[0], hole[1], False)
+            # Generate moles
+            if not game_over:
+                if random.random() < mole_appear_chance:
+                    new_mole = create_mole()
+                    if new_mole is not None:
+                        moles.append(new_mole)
 
-        if not game_over:
-            if random.random() < mole_appear_chance:
-                new_mole = create_mole()
-                if new_mole is not None:
-                    moles.append(new_mole)
+            # Draw moles and update timers
+            for mole in moles:
+                if mole["visible"]:
+                    screen.blit(mole["image"], (mole["x"], mole["y"]))
+                    mole["timer"] -= 1 / 60  # Subtract time based on frame rate
+                    if mole["timer"] <= 0:
+                        mole["visible"] = False
+                        for i, hole in enumerate(holes):
+                            if (hole[0], hole[1]) == (mole["x"], mole["y"]):
+                                holes[i] = (hole[0], hole[1], False)
 
-        for mole in moles:
-            if mole["visible"]:
-                screen.blit(mole["image"], (mole["x"], mole["y"]))
-                mole["timer"] -= 1 / 60
-                if mole["timer"] <= 0:
-                    mole["visible"] = False
-                    for i, hole in enumerate(holes):
-                        if (hole[0], hole[1]) == (mole["x"], mole["y"]):
-                            holes[i] = (hole[0], hole[1], False)
+            # Remove moles whose timers have expired
+            moles = [mole for mole in moles if mole["visible"]]
 
-        moles = [mole for mole in moles if mole["visible"]]
+            # Display score
+            score_text = myfont.render(f"Score: {score}", True, (255, 0, 0))
+            screen.blit(score_text, (10, 10))
 
-        score_text = myfont.render(f"Score: {score}", True, (255, 0, 0))
-        screen.blit(score_text, (10, 10))
+            # Display time left
+            if not game_over:
+                time_left = int(time_limit - (current_time - start_time))
+                time_text = myfont.render(f"Time Left: {time_left}s", True, (255, 0, 0))
+                screen.blit(time_text, (600, 10))
 
-        if not game_over:
-            time_left = int(time_limit - (current_time - start_time))
-            time_text = myfont.render(f"Time Left: {time_left}s", True,
-                                      (255, 0, 0))
-            screen.blit(time_text, (600, 10))
+            for hole in holes:
+                block_rect = block_image.get_rect(center=(hole[0], hole[1] + 110))
+                screen.blit(block_image, block_rect)
 
-        for hole in holes:
-            block_rect = block_image.get_rect(center=(hole[0],
-                                                      hole[1] + 110))
-            screen.blit(block_image, block_rect)
+            # Display game over message
+            if game_over:
+                blackout()
+                screen.fill("black")
+                game_over_text = myfont.render("Game Over", True, (255, 0, 0))
+                screen.blit(game_over_text,
+                            (WIDTH // 2 - 100, HEIGHT // 2 - 50))
+                final_score_text = myfont.render(f"Final Score: {score}", True,
+                                                 (255, 0, 0))
+                screen.blit(final_score_text, (WIDTH // 2 - 120, HEIGHT // 2))
+                pygame.display.update()
+                time.sleep(2)
+                game1 = False
+                extra_day1 = False
+                day5 = True
 
-        if game_over:
-            blackout()
-            screen.fill("black")
-            game_over_text = myfont.render("Game Over", True, (255, 0, 0))
-            screen.blit(game_over_text,
-                        (WIDTH // 2 - 100, HEIGHT // 2 - 50))
-            final_score_text = myfont.render(f"Final Score: {score}", True,
-                                             (255, 0, 0))
-            screen.blit(final_score_text, (WIDTH // 2 - 120, HEIGHT // 2))
-            pygame.display.update()
-            time.sleep(2)
-            game1 = False
-            day5 = True
+            pygame.display.flip()
+            clock.tick(60)
 
     # Day 5 - Oct 28
     elif day5:
