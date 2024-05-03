@@ -1172,6 +1172,8 @@ while running:
 
                 if player.club == 'Crystal':
                     extra_day2 = True
+                elif player.club == 'ArtHouse':
+                    extra_day3 = True
                 else:
                     day8 = True
                 day7 = False
