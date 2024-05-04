@@ -10,8 +10,8 @@ background_images = [
     'images/backgrounds/track.png', 'images/backgrounds/dorm.png',
     'images/backgrounds/hall.png', 'images/backgrounds/street.png',
     'images/backgrounds/kbtu_front.png', 'images/backgrounds/floor.png',
-    'images/backgrounds/park.png', 'images/backgrounds/crystal.png', 
-    'images/backgrounds/art.png'
+    'images/backgrounds/park.png', 'images/backgrounds/crystal.png',
+    'images/backgrounds/art.png', 'images/backgrounds/bar.png'
 ]
 backgrounds = [
     pygame.transform.scale(pygame.image.load(image), (WIDTH, HEIGHT))
@@ -68,10 +68,13 @@ losetext_rect = lose_text.get_rect()
 losetext_rect.center = (WIDTH // 2, HEIGHT // 2)
 
 option_choose = False
+option1_choose = False
 option = False
 game1 = game2 = game3 = game4 = False
-extra_day3 = True
-day4 = day2 = day3 = extra_day1 = extra_day2 = day1 = day5 = day6 = day7 = day8 = day9 = False
+extra_day3 = False
+day1 = True
+qash = pre_qash = False
+day4 = day2 = day3 = extra_day1 = extra_day2 = day5 = day7 = day8 = day9 = day6 = False
 day7_started = False
 
 club_join = False
@@ -211,9 +214,10 @@ holes = [(250, 150, False), (450, 150, False), (650, 150, False),
 def is_empty(hole):
     return not hole[2]
 
+
 # random letter render
 # def display_random_letter():
-#     random_letter = chr(random.randint(97, 122)) 
+#     random_letter = chr(random.randint(97, 122))
 #     text = myfont3.render(random_letter, True, 'white')
 #     text_rect = text.get_rect(center=(WIDTH/2 + 20, HEIGHT/2 - 70))
 #     screen.blit(text, text_rect)
@@ -608,7 +612,7 @@ while running:
                             club_join = True
                             clubs = False
                             print(
-                                f"Selected option {i+1}: {poster_options[i]}")
+                                f"Selected option {i + 1}: {poster_options[i]}")
 
                 exit_button_surf = myfont.render('x', True, 'white')
                 exit_button = pygame.Rect(700, 250, 40, 40)
@@ -771,7 +775,7 @@ while running:
             if player.check_stats() == True:
                 pygame.display.update()
                 time.sleep(3.5)
-                player.pos_y = 330
+                player.pos_x = 330
 
                 if player.club == 'Big City Lights':
                     extra_day1 = True
@@ -789,7 +793,7 @@ while running:
                 time.sleep(3.5)
                 break
 
-    #Big City Lights - 26 october
+    # Big City Lights - 26 october
     elif extra_day1:
         player.draw_stats(screen, (255, 255, 255))
         screen.blit(myfont2.render("October 26", True, "black"), (400, 10))
@@ -862,7 +866,7 @@ while running:
                     pygame.display.update()
                     time.sleep(3.5)
                     current_background = backgrounds[3]
-                    player.pos_y = 330
+                    player.pos_x = 330
                     day5 = True
                     option_choose = False
                     option = False
@@ -1012,7 +1016,7 @@ while running:
                 pygame.display.update()
                 time.sleep(3.5)
                 current_background = backgrounds[6]
-                player.pos_y = 400
+                player.pos_x = 400
                 day6 = True
                 option_choose = False
                 option = False
@@ -1062,17 +1066,184 @@ while running:
             if player.check_stats() == True:
                 pygame.display.update()
                 time.sleep(3.5)
-                current_background = backgrounds[0]
-                player.pos_x = 250
-                pygame.mixer.music.load('sounds/day7_music.mp3')
-                pygame.mixer.music.play(-1)
-                day7 = True
+                current_background = backgrounds[1]
+                pre_qash = True
                 day6 = False
             else:
                 lose_screen()
                 pygame.display.flip()
                 time.sleep(3.5)
                 break
+
+    # one day to Qash - Nov 2
+    elif pre_qash:
+        player.draw_stats(screen, (255, 255, 255))
+        screen.blit(myfont2.render("November 2", True, "black"), (400, 10))
+        text_transparent_surface = pygame.Surface((540, 150), pygame.SRCALPHA)
+        text_transparent_surface.fill((230, 230, 230, 200))
+        screen.blit(text_transparent_surface, (200, 50))
+        text = [
+            "Tomorrow is QASH, all of your friends are going!",
+            "It seems to be a very fun night out.",
+            "You can’t miss that!!"
+        ]
+        for i, t in enumerate(text):
+            text_surf = myfont.render(t, True, (0, 0, 0))
+            screen.blit(text_surf, (220, i * 30 + 70))
+
+        option_transparent_surface = pygame.Surface((500, 50), pygame.SRCALPHA)
+        option_transparent_surface.fill((230, 230, 230, 200))
+        option1_surf = myfont.render("Ofcc, let’s goo", True, "black")
+        option1 = pygame.Rect(200, 250, 500, 50)
+        screen.blit(option_transparent_surface, (200, 250))
+        screen.blit(option1_surf, (230, 262))
+
+        mouse_buttons = pygame.mouse.get_pressed()
+        if mouse_buttons[0]:
+            mouse_pos = pygame.mouse.get_pos()
+            if option1.collidepoint(mouse_pos):
+                blackout()
+                screen.fill("black")
+                if player.check_stats() == True:
+                    pygame.display.update()
+                    time.sleep(3.5)
+                    current_background = backgrounds[9]
+                    player.pos_x = 100
+                    qash = True
+                    pre_qash = False
+                else:
+                    lose_screen()
+                    pygame.display.flip()
+                    time.sleep(3.5)
+                    break
+
+    # QASH - Nov 3
+    elif qash:
+        player.draw_stats(screen, (255, 255, 255))
+        screen.blit(myfont2.render("November 3", True, "black"), (400, 10))
+        if not option1_choose:
+            text_transparent_surface = pygame.Surface((540, 150), pygame.SRCALPHA)
+            text_transparent_surface.fill((230, 230, 230, 200))
+            screen.blit(text_transparent_surface, (200, 50))
+            text = [
+                "You came to a party a little bit early,",
+                "and saw that your friends were hiding",
+                "behind bushes. Wanna peek at what they are doing?"
+            ]
+            for i, t in enumerate(text):
+                text_surf = myfont.render(t, True, (0, 0, 0))
+                screen.blit(text_surf, (220, i * 30 + 70))
+
+            option_transparent_surface = pygame.Surface((500, 50), pygame.SRCALPHA)
+            option_transparent_surface.fill((230, 230, 230, 200))
+            option1_surf = myfont.render("Yeah, I want to see. Let me see.", True, "black")
+            option1 = pygame.Rect(200, 250, 500, 50)
+            screen.blit(option_transparent_surface, (200, 250))
+            screen.blit(option1_surf, (230, 262))
+            option2_surf = myfont.render("No, I do not care.", True, "black")
+            option2 = pygame.Rect(200, 320, 500, 50)
+            screen.blit(option_transparent_surface, (200, 320))
+            screen.blit(option2_surf, (230, 332))
+
+            mouse_buttons = pygame.mouse.get_pressed()
+            if mouse_buttons[0]:
+                mouse_pos = pygame.mouse.get_pos()
+                if option1.collidepoint(mouse_pos):
+                    blackout()
+                    screen.fill("black")
+                    option1_choose = True
+                elif option2.collidepoint(mouse_pos):
+                    blackout()
+                    screen.fill("black")
+                    if player.check_stats() == True:
+                        pygame.display.update()
+                        time.sleep(3.5)
+                        current_background = backgrounds[0]
+                        player.pos_x = 250
+                        pygame.mixer.music.load('sounds/day7_music.mp3')
+                        pygame.mixer.music.play(-1)
+                        day7 = True
+                        option_choose = False
+                        option = False
+                        qash = False
+                    else:
+                        lose_screen()
+                        pygame.display.flip()
+                        time.sleep(3.5)
+                        break
+
+        elif option1_choose:
+            text_transparent_surface = pygame.Surface((640, 150), pygame.SRCALPHA)
+            text_transparent_surface.fill((230, 230, 230, 200))
+            screen.blit(text_transparent_surface, (175, 50))
+            text = [
+                "Apparently, your best friend was arguing with your common",
+                "friend. Whose side are you taking: your best friend, who",
+                "is wrong but very precious to you, or another friend, who",
+                "did nothing wrong, but isn’t as dear as you wish?"
+            ]
+            for i, t in enumerate(text):
+                text_surf = myfont.render(t, True, (0, 0, 0))
+                screen.blit(text_surf, (185, i * 30 + 70))
+
+            option_transparent_surface = pygame.Surface((500, 50), pygame.SRCALPHA)
+            option_transparent_surface.fill((230, 230, 230, 200))
+            option1_surf = myfont.render("My best friend’s!", True, "black")
+            option1 = pygame.Rect(200, 250, 500, 50)
+            screen.blit(option_transparent_surface, (200, 250))
+            screen.blit(option1_surf, (230, 262))
+            option2_surf = myfont.render("Other friend’s!", True, "black")
+            option2 = pygame.Rect(200, 320, 500, 50)
+            screen.blit(option_transparent_surface, (200, 320))
+            screen.blit(option2_surf, (230, 332))
+
+            mouse_buttons = pygame.mouse.get_pressed()
+            if mouse_buttons[0]:
+                mouse_pos = pygame.mouse.get_pos()
+                if option1.collidepoint(mouse_pos):
+                    option_choose = True
+                    option = True
+                elif option2.collidepoint(mouse_pos):
+                    option_choose = True
+                    option = False
+
+            if option_choose:
+                blackout()
+                screen.fill("black")
+                if option:
+                    text = [
+                        "You saved your relationships with your best friend,",
+                        "but now others are losing their respect to you…",
+                        "You were uninvited to QASH."
+                    ]
+                    for i, t in enumerate(text):
+                        text_surf = myfont.render(t, False, "white")
+                        screen.blit(text_surf, (200, i * 40 + 100))
+
+                else:
+                    text = [
+                        "You believe you made the right choice, so do others."
+                    ]
+                    for i, t in enumerate(text):
+                        text_surf = myfont.render(t, True, "white")
+                        screen.blit(text_surf, (200, i * 40 + 100))
+
+                if player.check_stats() == True:
+                    pygame.display.update()
+                    time.sleep(3.5)
+                    current_background = backgrounds[0]
+                    player.pos_x = 250
+                    pygame.mixer.music.load('sounds/day7_music.mp3')
+                    pygame.mixer.music.play(-1)
+                    day7 = True
+                    option_choose = False
+                    option = False
+                    qash = False
+                else:
+                    lose_screen()
+                    pygame.display.flip()
+                    time.sleep(3.5)
+                    break
 
     # Day 7 - Nov 4
     elif day7:
@@ -1189,7 +1360,7 @@ while running:
 
         clock.tick(60)
 
-    #Crystal - 9 november
+    # Crystal - 9 november
     elif extra_day2:
         player.draw_stats(screen, (255, 255, 255))
         screen.blit(myfont2.render("November 9", True, "black"), (400, 10))
@@ -1293,7 +1464,7 @@ while running:
                             current_background = backgrounds[1]
                             day8 = True
                             game2 = False
-                            
+
     # Arthause 9nov
     elif extra_day3:
         player.draw_stats(screen, (255, 255, 255))
@@ -1310,7 +1481,7 @@ while running:
         for i, t in enumerate(text):
             text_surf = myfont.render(t, True, (0, 0, 0))
             screen.blit(text_surf, (220, i * 30 + 70))
-        
+
         option_transparent_surface = pygame.Surface((500, 50), pygame.SRCALPHA)
         option_transparent_surface.fill((230, 230, 230, 200))
         option1_surf = myfont.render("Sure, I wanna be ready.", True,
@@ -1323,7 +1494,7 @@ while running:
         option2 = pygame.Rect(200, 270, 500, 50)
         screen.blit(option_transparent_surface, (200, 270))
         screen.blit(option2_surf, (230, 282))
-        
+
         mouse_buttons = pygame.mouse.get_pressed()
         if mouse_buttons[0]:
             mouse_pos = pygame.mouse.get_pos()
@@ -1333,7 +1504,7 @@ while running:
             elif option2.collidepoint(mouse_pos):
                 option_choose = True
                 option = False
-                
+
         if option_choose:
             blackout()
             screen.fill("black")
@@ -1358,13 +1529,13 @@ while running:
                 option_choose = False
                 option = False
                 day8 = True
-        
+
         while game3:
             screen.fill((0, 0, 0))
             art_backgraund = pygame.transform.scale(pygame.image.load('images/backgrounds/art.png'), (WIDTH, HEIGHT))
             screen.blit(art_backgraund, (0, 0))
 
-            screen.blit(myfont3.render(random_letter, True, "white"), (WIDTH/2 - 70, HEIGHT/2 - 100))
+            screen.blit(myfont3.render(random_letter, True, "white"), (WIDTH / 2 - 70, HEIGHT / 2 - 100))
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -1391,16 +1562,16 @@ while running:
                     if event.key == pygame.K_RIGHT:
                         is_moving_right = False
                         last_movement = False
-                        
+
                 if event.type == pygame.KEYDOWN:
                     pressed_key = event.key
                     if pygame.K_a <= pressed_key <= pygame.K_z:
                         pressed_letter = chr(pressed_key)
                         if pressed_letter == random_letter:
                             score_in_artgame += 1
-                            random_letter = chr(random.randint(97, 122))                        
+                            random_letter = chr(random.randint(97, 122))
                             print(score_in_artgame)
-            
+
             if is_moving_right and not is_moving_left and not day7:
                 player.pos_x += player.speed
                 player.pos_x = min(950, player.pos_x)
@@ -1419,8 +1590,9 @@ while running:
                 screen.blit(player.walk_left[0], (player.pos_x, player.pos_y))
             elif not day7_started:
                 screen.blit(player.walk_right[0], (player.pos_x, player.pos_y))
-    
-            screen.blit(myfont2.render("Score: {}".format(score_in_artgame), True, "white"), (WIDTH/2 - 230, HEIGHT/2 - 20))
+
+            screen.blit(myfont2.render("Score: {}".format(score_in_artgame), True, "white"),
+                        (WIDTH / 2 - 230, HEIGHT / 2 - 20))
             pygame.display.update()
             if score_in_artgame == 10:
                 if player.check_stats() == True:
@@ -1495,7 +1667,8 @@ while running:
 
             else:
                 text = [
-                    "Well, you may not be the party person, but now you definitely are the beast in C++",
+                    "Well, you may not be the party person,",
+                    "but now you definitely are the beast in C++",
                     "", "Stats:", "-10 happiness", "+10 grades", ""
                 ]
                 for i, t in enumerate(text):
@@ -1520,7 +1693,7 @@ while running:
                 time.sleep(3.5)
                 break
 
-    #Day 9 - Dec 18
+    # Day 9 - Dec 18
     elif day9:
         player.draw_stats(screen, (255, 255, 255))
         screen.blit(myfont2.render("December 8", True, "black"), (400, 10))
